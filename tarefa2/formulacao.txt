@@ -1,0 +1,9 @@
+1)estado  inicial
+2)estado objetivo
+3)acoes do agente
+    ir(norte),ir(leste)...
+4)acoes por estado
+
+guia de estruturacao de projetos python
+http://docs.python-guide.org/en/latest/writing/structure/
+
