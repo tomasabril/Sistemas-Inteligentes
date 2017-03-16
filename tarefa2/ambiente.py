@@ -1,5 +1,9 @@
+import random
+
+
 class Ambiente():
     grid = []
+
     # linha, coluna
     agentPos = [0, 0]
     linhaTamanho = 0
@@ -12,10 +16,20 @@ class Ambiente():
         # cada linha tem varias colunas
 
     def print_ambiente(self):
-        print('\n'.join(map(str, self.grid)))
+        # print('\n'.join(map(str, self.grid)))
+        for lin in range(self.linhaTamanho):
+            for col in range(self.colunaTamanho):
+                print(self.grid[lin][col], end=" ")
+            print()
 
     def add_obstaculo(self, linha, coluna):
         if 0 <= linha < self.linhaTamanho and 0 <= coluna < self.colunaTamanho:
+            self.grid[linha][coluna] = '#'
+
+    def add_obstaculo_rand(self, x):
+        for i in range(x):
+            linha = random.randint(0, self.linhaTamanho - 1)
+            coluna = random.randint(0, self.colunaTamanho - 1)
             self.grid[linha][coluna] = '#'
 
     def atualiza_agente(self, linha, coluna):
@@ -87,5 +101,7 @@ class Ambiente():
                     self.agentPos[0] += 1
                     self.agentPos[1] += 1
                     self.grid[self.agentPos[0]][self.agentPos[1]] = 'A'
+        else:
+            return 0
 
-
+        return 1
