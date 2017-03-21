@@ -35,10 +35,10 @@ def main():
     amb.print_ambiente()
     agt.ler_posicao(amb.get_agentPos())
 
-    # executa do ultimo ao primeiro, é uma pilha
+    # executa do primeiro ao ultimo
     comandos = [2, 6, 6, 7, 2, 9]
     while comandos:
-        comando = comandos.pop()
+        comando = comandos.pop(0)
         if amb.mover(comando):
             agt.mover(comando)
             print()
