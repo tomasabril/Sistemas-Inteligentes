@@ -5,7 +5,7 @@ class Ambiente():
     grid = []
 
     # linha, coluna
-    agentPos = [0, 0]
+    agentPos = []
     linhaTamanho = 0
     colunaTamanho = 0
 
@@ -32,16 +32,19 @@ class Ambiente():
             coluna = random.randint(0, self.colunaTamanho - 1)
             self.grid[linha][coluna] = '#'
 
-    def atualiza_agente(self, linha, coluna):
+    def set_agente(self, agentepos):
+        self.agentPos = agentepos
+        self.grid[self.agentPos[0]][self.agentPos[1]] = 'A'
+
+    def atualiza_agente(self, agentepos):
         self.grid[self.agentPos[0]][self.agentPos[1]] = '_'
-        self.agentPos[0] = linha
-        self.agentPos[1] = coluna
+        self.agentPos = agentepos
         self.grid[self.agentPos[0]][self.agentPos[1]] = 'A'
 
     def get_ambiente(self):
         return self.grid
 
-    def get_agentPos(self):
+    def get_agentpos(self):
         return self.agentPos
 
     def mover(self, movimento):

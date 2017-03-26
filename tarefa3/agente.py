@@ -6,54 +6,61 @@ class Agente():
     repr_amb = []
     linhaTamanho = 0
     colunaTamanho = 0
-    minhaPosicao = [0, 0]
-    objetivo = [0, 0]
+    minhaPosicao = []
+    objetivo = []
     comandos = []
 
-    def __init__(self, linha, coluna, ambiente):
+    def __init__(self, agentepos, ambiente):
         self.repr_amb = ambiente
-        self.minhaPosicao[0] = linha
-        self.minhaPosicao[1] = coluna
+        self.minhaPosicao = agentepos
         self.linhaTamanho = len(ambiente)
         self.colunaTamanho = len(ambiente[0])
 
     def set_comandos(self, lista):
         self.comandos = lista
 
-    def set_objetivo(self, linha, coluna):
-        self.objetivo[0] = linha
-        self.objetivo[1] = coluna
+    def executa_cmds(self):
+        while self.comandos:
+            comando = self.comandos.pop(0)
+            print("ação a ser executada: " + str(comando))
+            if comando in self.acoes_possiveis():
+                self.mover(comando)
 
-    def ler_posicao(self, posicao_real):
-        print(posicao_real)
-        self.minhaPosicao = posicao_real
+    def set_objetivo(self, obj):
+        self.objetivo = obj
+
+    def get_posicao(self):
+        return self.minhaPosicao
+
+    
 
     def acoes_possiveis(self):
         acoes = []
         if 0 <= self.minhaPosicao[0] - 1 < self.linhaTamanho and 0 <= self.minhaPosicao[1] - 1 < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0] - 1][self.minhaPosicao[1] - 1] == '_':
+            if self.repr_amb[self.minhaPosicao[0] - 1][self.minhaPosicao[1] - 1] == '_':
                 acoes.append(7)
         if 0 <= self.minhaPosicao[0] - 1 < self.linhaTamanho and 0 <= self.minhaPosicao[1] < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0] - 1][self.minhaPosicao[1]] == '_':
+            if self.repr_amb[self.minhaPosicao[0] - 1][self.minhaPosicao[1]] == '_':
                 acoes.append(8)
         if 0 <= self.minhaPosicao[0] - 1 < self.linhaTamanho and 0 <= self.minhaPosicao[1] + 1 < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0] - 1][self.minhaPosicao[1] + 1] == '_':
+            if self.repr_amb[self.minhaPosicao[0] - 1][self.minhaPosicao[1] + 1] == '_':
                 acoes.append(9)
         if 0 <= self.minhaPosicao[0] < self.linhaTamanho and 0 <= self.minhaPosicao[1] - 1 < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0]][self.minhaPosicao[1] - 1] == '_':
+            if self.repr_amb[self.minhaPosicao[0]][self.minhaPosicao[1] - 1] == '_':
                 acoes.append(4)
         if 0 <= self.minhaPosicao[0] < self.linhaTamanho and 0 <= self.minhaPosicao[1] + 1 < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0]][self.minhaPosicao[1] + 1] == '_':
+            if self.repr_amb[self.minhaPosicao[0]][self.minhaPosicao[1] + 1] == '_':
                 acoes.append(6)
         if 0 <= self.minhaPosicao[0] + 1 < self.linhaTamanho and 0 <= self.minhaPosicao[1] - 1 < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0] + 1][self.minhaPosicao[1] - 1] == '_':
+            if self.repr_amb[self.minhaPosicao[0] + 1][self.minhaPosicao[1] - 1] == '_':
                 acoes.append(1)
         if 0 <= self.minhaPosicao[0] + 1 < self.linhaTamanho and 0 <= self.minhaPosicao[1] < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0] + 1][self.minhaPosicao[1]] == '_':
+            if self.repr_amb[self.minhaPosicao[0] + 1][self.minhaPosicao[1]] == '_':
                 acoes.append(2)
         if 0 <= self.minhaPosicao[0] + 1 < self.linhaTamanho and 0 <= self.minhaPosicao[1] + 1 < self.colunaTamanho:
-            if self.grid[self.minhaPosicao[0] + 1][self.minhaPosicao[1] + 1] == '_':
+            if self.repr_amb[self.minhaPosicao[0] + 1][self.minhaPosicao[1] + 1] == '_':
                 acoes.append(3)
+        return acoes
 
     def mover(self, movimento):
         if movimento == 7:
