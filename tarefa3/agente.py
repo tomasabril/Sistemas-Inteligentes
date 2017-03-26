@@ -7,7 +7,8 @@ class Agente():
     linhaTamanho = 0
     colunaTamanho = 0
     minhaPosicao = [0, 0]
-    objetivo = []
+    objetivo = [0, 0]
+    comandos = []
 
     def __init__(self, linha, coluna, ambiente):
         self.repr_amb = ambiente
@@ -15,6 +16,9 @@ class Agente():
         self.minhaPosicao[1] = coluna
         self.linhaTamanho = len(ambiente)
         self.colunaTamanho = len(ambiente[0])
+
+    def set_comandos(self, lista):
+        self.comandos = lista
 
     def set_objetivo(self, linha, coluna):
         self.objetivo[0] = linha
