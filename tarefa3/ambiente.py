@@ -47,6 +47,35 @@ class Ambiente():
     def get_agentpos(self):
         return self.agentPos
 
+    def acoes_possiveis(self, posicao):
+        # retorna [ movimento, [linha, coluna] ]
+        acoes = []
+        if 0 <= posicao[0] - 1 < self.linhaTamanho and 0 <= posicao[1] - 1 < self.colunaTamanho:
+            if self.grid[posicao[0] - 1][posicao[1] - 1] == '_':
+                acoes.append([7, [posicao[0] - 1, posicao[1] - 1]])
+        if 0 <= posicao[0] - 1 < self.linhaTamanho and 0 <= posicao[1] < self.colunaTamanho:
+            if self.grid[posicao[0] - 1][posicao[1]] == '_':
+                acoes.append([8, [posicao[0] - 1, posicao[1]]])
+        if 0 <= posicao[0] - 1 < self.linhaTamanho and 0 <= posicao[1] + 1 < self.colunaTamanho:
+            if self.grid[posicao[0] - 1][posicao[1] + 1] == '_':
+                acoes.append([9, [posicao[0] - 1, posicao[1] + 1]])
+        if 0 <= posicao[0] < self.linhaTamanho and 0 <= posicao[1] - 1 < self.colunaTamanho:
+            if self.grid[posicao[0]][posicao[1] - 1] == '_':
+                acoes.append([4, [posicao[0], posicao[1] - 1]])
+        if 0 <= posicao[0] < self.linhaTamanho and 0 <= posicao[1] + 1 < self.colunaTamanho:
+            if self.grid[posicao[0]][posicao[1] + 1] == '_':
+                acoes.append([6, [posicao[0], posicao[1] + 1]])
+        if 0 <= posicao[0] + 1 < self.linhaTamanho and 0 <= posicao[1] - 1 < self.colunaTamanho:
+            if self.grid[posicao[0] + 1][posicao[1] - 1] == '_':
+                acoes.append([1, [posicao[0] + 1, posicao[1] - 1]])
+        if 0 <= posicao[0] + 1 < self.linhaTamanho and 0 <= posicao[1] < self.colunaTamanho:
+            if self.grid[posicao[0] + 1][posicao[1]] == '_':
+                acoes.append([2, [posicao[0] + 1, posicao[1]]])
+        if 0 <= posicao[0] + 1 < self.linhaTamanho and 0 <= posicao[1] + 1 < self.colunaTamanho:
+            if self.grid[posicao[0] + 1][posicao[1] + 1] == '_':
+                acoes.append([2, [posicao[0] + 1, posicao[1] + 1]])
+        return acoes
+
     def mover(self, movimento):
         if movimento == 7:
             if 0 <= self.agentPos[0] - 1 < self.linhaTamanho and 0 <= self.agentPos[1] - 1 < self.colunaTamanho:

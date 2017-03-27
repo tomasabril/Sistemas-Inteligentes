@@ -4,6 +4,7 @@
 import time
 import ambiente
 import agente
+import arvore
 
 
 def main():
@@ -30,11 +31,16 @@ def main():
     amb.print_ambiente()
     print(agt.get_posicao())
     agt.set_objetivo([7, 2])
-    agt.set_comandos([8, 8, 8, 9, 6, 6, 2, 2, 1])
+    # agt.set_objetivo([0, 8])
+    # agt.set_comandos([8, 8, 8, 9, 6, 6, 2, 2, 1])
+    print("objetivo: " + str(agt.objetivo))
+    agt.set_comandos(agt.busca_largura())
+    print("numero de espacos vazios: " + str(linha * coluna - len(paredes)))
+    print("solucao: " + str(agt.comandos))
 
     agt.executa_cmds()
 
-    print("chegou ao final: ")
+    print("ambiente no fim: ")
     amb.print_ambiente()
 
     print(amb.get_agentpos())
@@ -42,5 +48,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # execute only if run as a script
+    # execute only if run from here
     main()
