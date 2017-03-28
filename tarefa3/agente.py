@@ -62,10 +62,12 @@ class Agente():
                         solucao.reverse()
                         break
             else:
-                arv.visitados.append(no)
+                #arv.visitados.append(no)
                 continue
             break
         print("quantidade de nós na arvore: " + str(len(arv.nos)))
+        print("nós explorados: " + str(len(arv.visitados)))
+        print(arv.visitados)
         return solucao
 
     def acoes_possiveis(self):
