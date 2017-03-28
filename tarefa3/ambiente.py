@@ -1,3 +1,6 @@
+# Tomás Abril
+# Allan Patrick
+
 import random
 
 

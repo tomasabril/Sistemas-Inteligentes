@@ -1,5 +1,7 @@
 # -----
 #
+# Tomás Abril
+# Allan Patrick
 
 class Arvore():
     nos = []
@@ -8,6 +10,7 @@ class Arvore():
 
     def inserir_nos(self, no):
         self.nos.append(no)
+
     def inserir_fronteira(self, no):
         self.fronteira.append(no)
 
