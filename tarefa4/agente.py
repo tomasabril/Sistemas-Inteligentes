@@ -61,11 +61,17 @@ class Agente():
                             + abs(acao[1][1] - self.objetivo[1])
                 no_tmp = arvore.No(no, [], acao[1], acao[0],
                                    no.custo + acao[2], h=estimativa)
-                if no_tmp.pos not in arv.visitados and \
-                   no_tmp.pos not in [x.pos for x in arv.fronteira]:
-                    arv.inserir_nos(no_tmp)
-                    arv.inserir_fronteira(no_tmp)
-                    arv.visitados.append(no.pos)
+#                if no_tmp.pos not in arv.visitados and no_tmp.pos not in [x.pos for x in arv.fronteira]:
+                flag = False
+                if no_tmp.pos not in arv.visitados:
+                    for i in arv.fronteira:
+                        if no_tmp.pos == i.pos:
+                            if no_tmp.f > i.f:
+                                flag = True
+                    if flag == False:
+                        arv.inserir_nos(no_tmp)
+                        arv.inserir_fronteira(no_tmp)
+                        arv.visitados.append(no.pos)
 
             else:
                 continue
