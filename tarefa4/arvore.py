@@ -16,6 +16,7 @@ class Arvore():
         self.fronteira.append(no)
 
     def reordenar_fronteira(self):
+#        self.fronteira = sorted(self.fronteira, key=lambda no_de_fronteira: no_de_fronteira.custo)
         self.fronteira.sort(key=lambda no_de_fronteira: no_de_fronteira.custo)
 
 

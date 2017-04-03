@@ -38,10 +38,10 @@ class Agente():
 
     def get_posicao(self):
         return self.minhaPosicao
-    
+
     def a_estrela(self):
-       pass
-        
+        pass
+
     def busca_custo_uniforme(self):
         solucao = []
         arv = arvore.Arvore()
@@ -49,22 +49,26 @@ class Agente():
         arv.inserir_nos(no)
         arv.inserir_fronteira(no)
         while (arv.fronteira):
-            arv.reordenar_fronteira
+#            print([i.custo for i in arv.fronteira])
+            arv.reordenar_fronteira()
+#            print([i.custo for i in arv.fronteira])
             no = arv.fronteira.pop(0)
+            if no.pos == self.objetivo:
+                # go for solution
+                while no.pai:
+                    solucao.append(no.acao)
+                    no = no.pai
+                solucao.reverse()
+                break
             possib = self.acoes_com_result(no.pos)
             for acao in possib:
                 no_tmp = arvore.No(no, [], acao[1], acao[0], no.custo + acao[2])
                 if no_tmp.pos not in arv.visitados and no_tmp.pos not in [x.pos for x in arv.fronteira]:
+#                if no_tmp.pos not in arv.visitados:
                     arv.inserir_nos(no_tmp)
                     arv.inserir_fronteira(no_tmp)
                     arv.visitados.append(no.pos)
-                    if no_tmp.pos == self.objetivo:
-                        # go for solution
-                        while no_tmp.pai:
-                            solucao.append(no_tmp.acao)
-                            no_tmp = no_tmp.pai
-                        solucao.reverse()
-                        break
+
             else:
                 continue
             break
@@ -74,7 +78,7 @@ class Agente():
         return solucao
 
     def busca_largura(self):
-        # copiado da tarefa 3, nao funciona por causa das modificacoes que fiz na acoes_possiveis() 
+        # copiado da tarefa 3, nao funciona por causa das modificacoes que fiz na acoes_possiveis()
         solucao = []
         arv = arvore.Arvore()
         no = arvore.No([], [], self.minhaPosicao[:], [])
