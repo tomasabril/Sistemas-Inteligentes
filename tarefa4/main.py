@@ -24,7 +24,7 @@ def main():
                [6, 5], [5, 5], [3, 5], [2, 5], [0, 5],
                [0, 6],
                [7, 7], [6, 7], [5, 7], [3, 7], [1, 7], [0, 7]]
-    
+
     for i in range(len(paredes)):
         amb.add_obstaculo(paredes[i][0], paredes[i][1])
 
@@ -36,12 +36,12 @@ def main():
     agt.set_objetivo([2, 8])
     print("objetivo: " + str(agt.objetivo))
 
-#    if int(input("1 para A* \n0 para busca de custo uniforme: ")) == 1:
-#        print("executando A*")
-#        agt.set_comandos(agt.a_estrela())
-#    else:
-    print("executando custo uniforme \n")
-    agt.set_comandos(agt.busca_custo_uniforme())
+    if int(input("1 para A* \n0 para busca de custo uniforme: ")) == 1:
+        print("executando A*")
+        agt.set_comandos(agt.a_estrela())
+    else:
+        print("executando custo uniforme \n")
+        agt.set_comandos(agt.busca_custo_uniforme())
 
     print("\nnumero de espacos vazios: " + str(linha * coluna - len(paredes)))
     print("solucao: " + str(agt.comandos))
