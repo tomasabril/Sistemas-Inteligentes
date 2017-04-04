@@ -4,6 +4,7 @@
 # Allan Patrick
 
 import arvore
+import math
 
 
 class Agente():
@@ -49,6 +50,7 @@ class Agente():
             arv.reordenar_fronteira_f()
             no = arv.fronteira.pop(0)
             if no.pos == self.objetivo:
+                print("custo: " + str(no.custo))
                 # go for solution
                 while no.pai:
                     solucao.append(no.acao)
@@ -57,11 +59,12 @@ class Agente():
                 break
             possib = self.acoes_com_result(no.pos)
             for acao in possib:
-                estimativa = abs(acao[1][0] - self.objetivo[0]) \
-                            + abs(acao[1][1] - self.objetivo[1])
+                # estimativa pitagorica 
+                estimativa = math.sqrt(abs(acao[1][0] - self.objetivo[0])**2 + abs(acao[1][1] - self.objetivo[1])**2)
+                # estimativa manhatan
+                #estimativa = abs(acao[1][0] - self.objetivo[0])+ abs(acao[1][1] - self.objetivo[1])
                 no_tmp = arvore.No(no, [], acao[1], acao[0],
                                    no.custo + acao[2], h=estimativa)
-#                if no_tmp.pos not in arv.visitados and no_tmp.pos not in [x.pos for x in arv.fronteira]:
                 flag = False
                 if no_tmp.pos not in arv.visitados:
                     for i in arv.fronteira:
