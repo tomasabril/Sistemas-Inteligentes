@@ -81,7 +81,7 @@ class Agente():
             break
         print("quantidade de nós na arvore: " + str(len(arv.nos)))
         print("nós explorados: " + str(len(arv.visitados)))
-        print(arv.visitados)
+#        print(arv.visitados)
         return solucao
 
     def busca_custo_uniforme(self):
@@ -94,6 +94,7 @@ class Agente():
             arv.reordenar_fronteira()
             no = arv.fronteira.pop(0)
             if no.pos == self.objetivo:
+                print("custo: " + str(no.custo))
                 # go for solution
                 while no.pai:
                     solucao.append(no.acao)
@@ -113,7 +114,7 @@ class Agente():
             break
         print("quantidade de nós na arvore: " + str(len(arv.nos)))
         print("nós explorados: " + str(len(arv.visitados)))
-        print(arv.visitados)
+#        print(arv.visitados)
         return solucao
 
     def busca_largura(self):
