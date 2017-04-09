@@ -47,7 +47,6 @@ class Agente():
 
     def set_objetivo(self, obj):
         self.objetivo = obj
-        self.repr_amb[obj[0]][obj[1]] = 'o'
 
     def get_posicao(self):
         return self.minhaPosicao
@@ -249,4 +248,3 @@ class Agente():
             for col in range(self.colunaTamanho):
                 print(self.repr_amb[lin][col], end=" ")
             print()
-

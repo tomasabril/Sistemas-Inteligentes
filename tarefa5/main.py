@@ -30,11 +30,10 @@ def main():
 
     agt = agente.Agente([8, 0], amb.get_ambiente(), amb.andavel, amb.parede)
     amb.set_agente(agt.minhaPosicao)
-    agt.set_objetivo([2, 8])
-
     print("ambiente no inicio: ")
     amb.print_ambiente()
     print("posicao do agente" + str(agt.get_posicao()))
+    agt.set_objetivo([2, 8])
     print("objetivo: " + str(agt.objetivo))
 
     if int(input("1 para A* \n0 para busca de custo uniforme: ")) == 1:
