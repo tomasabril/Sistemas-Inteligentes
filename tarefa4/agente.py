@@ -61,6 +61,7 @@ class Agente():
         while (arv.fronteira):
             arv.reordenar_fronteira_f()
             no = arv.fronteira.pop(0)
+            arv.visitados.append(no.pos)
             self.repr_amb[no.pos[0]][no.pos[1]] = '◫'
             if no.pos == self.objetivo:
                 print("custo: " + str(no.custo))
@@ -87,7 +88,6 @@ class Agente():
                     if flag == False:
                         arv.inserir_nos(no_tmp)
                         arv.inserir_fronteira(no_tmp)
-                        arv.visitados.append(no.pos)
                         self.repr_amb[no_tmp.pos[0]][no_tmp.pos[1]] = '□'
 
             else:
@@ -108,6 +108,7 @@ class Agente():
             
             arv.reordenar_fronteira()
             no = arv.fronteira.pop(0)
+            arv.visitados.append(no.pos)
             self.repr_amb[no.pos[0]][no.pos[1]] = '◫'
             if no.pos == self.objetivo:
                 print("custo: " + str(no.custo))
@@ -127,7 +128,6 @@ class Agente():
 #                    input()
                     arv.inserir_nos(no_tmp)
                     arv.inserir_fronteira(no_tmp)
-                    arv.visitados.append(no.pos)
                     self.repr_amb[no_tmp.pos[0]][no_tmp.pos[1]] = '□'
 
             else:

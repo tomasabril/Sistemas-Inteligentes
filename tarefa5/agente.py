@@ -8,14 +8,13 @@ import arvore
 
 
 class Agente():
-    # representação do ambiente
+   # representação do ambiente
     repr_amb = []
     linhaTamanho = 0
     colunaTamanho = 0
     minhaPosicao = []
     objetivo = []
     comandos = []
-
 
     def __init__(self, agentepos, ambiente, andavel, parede):
         self.repr_amb = ambiente
@@ -26,7 +25,7 @@ class Agente():
         self.parede = parede
 
     def set_comandos(self, lista):
-        self.comandos = lista
+        self.comandos = lista[:]
 
     def executa_cmds(self):
         while self.comandos:
@@ -36,7 +35,7 @@ class Agente():
                 self.mover(comando)
             else:
                 print("Ação " + str(comando) + " não pode ser executada")
-                
+
     def executa_um_cmd(self):
         comando = self.comandos.pop(0)
 #            print("ação a ser executada: " + str(comando))
@@ -47,96 +46,65 @@ class Agente():
 
     def set_objetivo(self, obj):
         self.objetivo = obj
+        self.repr_amb[obj[0]][obj[1]] = 'o'
 
     def get_posicao(self):
         return self.minhaPosicao
 
-    def a_estrela(self):
+    def busca_dfs(self):
         solucao = []
-        arv = arvore.Arvore()
-        no = arvore.No([], [], self.minhaPosicao[:], [], 0)
-        arv.inserir_nos(no)
-        arv.inserir_fronteira(no)
-        while (arv.fronteira):
-            arv.reordenar_fronteira_f()
-            no = arv.fronteira.pop(0)
-            self.repr_amb[no.pos[0]][no.pos[1]] = '◫'
-            if no.pos == self.objetivo:
-                print("custo: " + str(no.custo))
-                # go for solution
-                while no.pai:
-                    solucao.append(no.acao)
-                    no = no.pai
-                solucao.reverse()
-                break
-            possib = self.acoes_com_result(no.pos)
-            for acao in possib:
-                # estimativa pitagorica 
-                estimativa = math.sqrt(abs(acao[1][0] - self.objetivo[0])**2 + abs(acao[1][1] - self.objetivo[1])**2)
-                # estimativa manhatan
-                #estimativa = abs(acao[1][0] - self.objetivo[0])+ abs(acao[1][1] - self.objetivo[1])
-                no_tmp = arvore.No(no, [], acao[1], acao[0],
-                                   no.custo + acao[2], h=estimativa)
-                flag = False
-                if no_tmp.pos not in arv.visitados:
-                    for i in arv.fronteira:
-                        if no_tmp.pos == i.pos:
-                            if no_tmp.f > i.f:
-                                flag = True
-                    if flag == False:
-                        arv.inserir_nos(no_tmp)
-                        arv.inserir_fronteira(no_tmp)
-                        arv.visitados.append(no.pos)
-                        self.repr_amb[no_tmp.pos[0]][no_tmp.pos[1]] = '□'
+        acoes = [8, 9, 6, 3, 2, 1, 4, 7]
+        custo = 0
+        custo1 = (8, 4, 6, 2)
+        custo15 = (7, 9, 1, 3)
+        # { (linha, coluna) : [coisas, daquela, posicao] }
+        result = {}
+        untried = {}
+        unbacktracked = {}
 
+        a_pos = tuple(self.minhaPosicao)
+        
+        while self.minhaPosicao != self.objetivo:
+            if a_pos not in untried:
+                untried[a_pos] = acoes[:]
+                result[a_pos] = [0 for i in range(10)]
+                unbacktracked[a_pos] = []
+            if untried[a_pos]:
+                acao = untried[a_pos].pop(0)
             else:
-                continue
-            break
-        print("quantidade de nós na arvore: " + str(len(arv.nos)))
-        print("nós explorados: " + str(len(arv.visitados)))
-#        print(arv.visitados)
-        return solucao
-    
-    def busca_custo_uniforme(self):
-        solucao = []
-        arv = arvore.Arvore()
-        no = arvore.No([], [], self.minhaPosicao[:], [], 0)
-        arv.inserir_nos(no)
-        arv.inserir_fronteira(no)
-        while (arv.fronteira):
-            
-            arv.reordenar_fronteira()
-            no = arv.fronteira.pop(0)
-            self.repr_amb[no.pos[0]][no.pos[1]] = '◫'
-            if no.pos == self.objetivo:
-                print("custo: " + str(no.custo))
-                # go for solution
-                while no.pai:
-                    solucao.append(no.acao)
-                    no = no.pai
-                solucao.reverse()
-                break
-            possib = self.acoes_com_result(no.pos)
-            for acao in possib:
-                no_tmp = arvore.No(no, [], acao[1], acao[0], no.custo + acao[2])
-                if no_tmp.pos not in arv.visitados and no_tmp.pos not in [x.pos for x in arv.fronteira]:
-#                    self.print_repr()
-#                    print(acao)
-#                    print(possib)
-#                    input()
-                    arv.inserir_nos(no_tmp)
-                    arv.inserir_fronteira(no_tmp)
-                    arv.visitados.append(no.pos)
-                    self.repr_amb[no_tmp.pos[0]][no_tmp.pos[1]] = '□'
-
+                if not unbacktracked[a_pos]:
+                    print ("Sem acoes para fazer")
+                    break
+                else:
+                    print("Backtracking !")
+                    acao = unbacktracked[a_pos].pop(0)
+            if acao in self.acoes_possiveis():
+                pos_anterior = tuple(self.minhaPosicao)
+                self.mover(acao)
+                a_pos = tuple(self.minhaPosicao)
+                if a_pos not in unbacktracked:
+                    unbacktracked[a_pos] = []
+                unbacktracked[a_pos].insert(0, pos_anterior)
+                if pos_anterior not in result:
+                    result[pos_anterior] = ()
+                result[pos_anterior][acao] = a_pos
+                print("untried: " + str(untried[pos_anterior]))
             else:
-                continue
-            break
-        print("quantidade de nós na arvore: " + str(len(arv.nos)))
-        print("nós explorados: " + str(len(arv.visitados)))
-#        print(arv.visitados)
+                result[a_pos][acao] = a_pos
+                print("untried: " + str(untried[a_pos]))
+            solucao.append(acao)
+            custo += 1 if acao in custo1 else 1.5
+            print("acao: " + str(acao))
+            self.print_repr()    
+            input()
+        
+        print("Custo: " + str(custo))
+        print("função result: ")
+        print(result)
         return solucao
 
+    def busca_lrta(self):
+        pass
 
     def acoes_possiveis(self):
         acoes = []
@@ -236,7 +204,7 @@ class Agente():
             self.minhaPosicao[0] += 1
             self.minhaPosicao[1] += 1
             self.repr_amb[self.minhaPosicao[0]][self.minhaPosicao[1]] = 'A'
-            
+
     def print_repr(self):
         # print('\n'.join(map(str, self.grid)))
         print("  ", end='')
