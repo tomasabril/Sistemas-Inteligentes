@@ -5,7 +5,7 @@
 
 import math
 import arvore
-
+import random
 
 class Agente():
    # representação do ambiente
@@ -14,7 +14,11 @@ class Agente():
     colunaTamanho = 0
     minhaPosicao = []
     objetivo = []
+    # para executar
     comandos = []
+    # estimativa h { (linha, coluna): estimativa }
+    est_h = {}
+
 
     def __init__(self, agentepos, ambiente, andavel, parede):
         self.repr_amb = ambiente
@@ -63,7 +67,7 @@ class Agente():
         unbacktracked = {}
 
         a_pos = tuple(self.minhaPosicao)
-        
+
         while self.minhaPosicao != self.objetivo:
             if a_pos not in untried:
                 untried[a_pos] = acoes[:]
@@ -95,16 +99,49 @@ class Agente():
             solucao.append(acao)
             custo += 1 if acao in custo1 else 1.5
             print("acao: " + str(acao))
-            self.print_repr()    
+            self.print_repr()
             input()
-        
+
         print("Custo: " + str(custo))
         print("função result: ")
         print(result)
         return solucao
 
-    def busca_lrta(self):
-        pass
+    def busca_lrta(self, inicializar_h = False):
+        solucao = []
+        custo = 0
+        custo1 = (8, 4, 6, 2)
+        custo15 = (7, 9, 1, 3)
+        # proximo = [movimento, [pos], custo + estimativa]
+        proximo = []
+        # h { (linha, coluna) : estimativa }
+        if inicializar_h:
+            for lin in range(self.linhaTamanho):
+                for col in range(self.colunaTamanho):
+                    # euristica euclidiana
+                    self.est_h[tuple([lin, col])] = math.sqrt(abs(lin - self.objetivo[0])**2 + abs(col- self.objetivo[1])**2)
+        while self.minhaPosicao != self.objetivo:
+            proximo.clear()
+            for acao in self.acoes_com_result(self.minhaPosicao):
+                pos_resultante = (acao[1][0], acao[1][1])
+                proximo.append([ acao[0], acao[1], acao[2] + self.est_h[pos_resultante] ])
+            random.shuffle(proximo)
+            proximo.sort(key=lambda prox: prox[2])
+            # atualizando estimativas
+            if self.est_h[tuple(self.minhaPosicao)] < proximo[0][2]:
+                self.est_h[tuple(self.minhaPosicao)] = proximo[0][2]
+            movimento = proximo[0][0]
+            self.mover(movimento)
+
+            solucao.append(movimento)
+            custo += 1 if movimento in custo1 else 1.5
+            print("acao: " + str(proximo[0]))
+            self.print_repr()
+            input()
+
+        print("Estimativas: " + str(self.est_h))
+        print("Custo: " + str(custo))
+        return solucao
 
     def acoes_possiveis(self):
         acoes = []

@@ -19,7 +19,7 @@ def main():
     amb = ambiente.Ambiente(linha, coluna)
 
     # criando paredes como no pdf
-    paredes = [[2, 1],
+    paredes = [[2, 1], #[1, 1], [3, 1],
                [1, 2], [3, 2]]
 
     for i in range(len(paredes)):
@@ -34,12 +34,12 @@ def main():
     print("posicao do agente" + str(agt.get_posicao()))
     print("objetivo: " + str(agt.objetivo))
 
-    if int(input("1 para DFS \n0 para LRTA*: ")) == 1:
-        print("executando DFS ...")
-        agt.set_comandos(agt.busca_dfs())
-    else:
-        print("executando LRTA* ... \n")
-        agt.set_comandos(agt.busca_lrta())
+#    if int(input("1 para DFS \n0 para LRTA*: ")) == 1:
+#        print("executando DFS ...")
+#        agt.set_comandos(agt.busca_dfs())
+#    else:
+    print("executando LRTA* ... \n")
+    agt.set_comandos(agt.busca_lrta(inicializar_h=True))
 
     print("\nnumero de espacos vazios: " + str(linha * coluna - len(paredes)))
     print("solucao: " + str(agt.comandos))
