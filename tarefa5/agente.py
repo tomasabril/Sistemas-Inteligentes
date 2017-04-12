@@ -73,6 +73,7 @@ class Agente():
         a_pos = tuple(self.minhaPosicao)
 
         while self.minhaPosicao != self.objetivo:
+            backtrk = False
             if a_pos not in untried:
                 untried[a_pos] = acoes[:]
                 result[a_pos] = [0 for i in range(10)]
@@ -81,18 +82,22 @@ class Agente():
                 acao = untried[a_pos].pop(0)
             else:
                 if not unbacktracked[a_pos]:
-                    print ("Sem acoes para fazer")
+                    print ("Sem acoes para fazer, acabou a lista de unbacktracked")
                     break
                 else:
                     print("Backtracking !")
-                    acao = unbacktracked[a_pos].pop(0)[1]
+#                    acao = unbacktracked[a_pos].pop(0)[1]
+                    pra_onde_ir = unbacktracked[a_pos].pop(0)
+                    acao = result[a_pos].index(pra_onde_ir[0])
+                    backtrk = True
             if acao in self.acoes_possiveis():
                 pos_anterior = tuple(self.minhaPosicao)
                 self.mover(acao)
                 a_pos = tuple(self.minhaPosicao)
                 if a_pos not in unbacktracked:
                     unbacktracked[a_pos] = []
-                unbacktracked[a_pos].insert(0, [pos_anterior, acao])
+                if not backtrk:
+                    unbacktracked[a_pos].insert(0, [pos_anterior, acao])
                 if pos_anterior not in result:
                     result[pos_anterior] = ()
                 result[pos_anterior][acao] = a_pos

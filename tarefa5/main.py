@@ -20,8 +20,8 @@ def main():
 
     # criando paredes como no pdf
     paredes = [[2, 1], [1, 1], [3, 1],
-                        [1, 2], [3, 2], [1, 3]
-                        ]
+               [1, 2], [3, 2], [1, 3]
+               ]
 
     for i in range(len(paredes)):
         amb.add_obstaculo(paredes[i][0], paredes[i][1])
@@ -40,7 +40,7 @@ def main():
         agt.atualiza_posicao(pos_inicial)
         amb.atualiza_agente(agt.minhaPosicao)
         amb.reseta_chao()
-        
+
         agt.set_objetivo(pos_objetivo)
 
         print("ambiente no inicio: ")
@@ -73,4 +73,3 @@ def main():
 if __name__ == "__main__":
     # execute only if run from here
     main()
-
