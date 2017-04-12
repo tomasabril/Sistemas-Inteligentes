@@ -57,6 +57,12 @@ class Ambiente():
     def get_agentpos(self):
         return self.agentPos
 
+    def reseta_chao(self):
+        for lin in range(self.linhaTamanho):
+                for col in range(self.colunaTamanho):
+                    if self.grid[lin][col] in self.andavel:
+                        self.grid[lin][col] = '_'
+
     def acoes_possiveis(self, posicao):
         # retorna [ movimento, [linha, coluna] ]
         acoes = []

@@ -42,3 +42,4 @@ class No():
 
     def insert_filhos(self, filhos):
         self.filhos.extend(filhos)
+

@@ -22,7 +22,7 @@ class Agente():
 
     def __init__(self, agentepos, ambiente, andavel, parede):
         self.repr_amb = ambiente
-        self.minhaPosicao = agentepos
+        self.minhaPosicao = agentepos[:]
         self.linhaTamanho = len(ambiente)
         self.colunaTamanho = len(ambiente[0])
         self.andavel = andavel
@@ -55,6 +55,10 @@ class Agente():
     def get_posicao(self):
         return self.minhaPosicao
 
+    def atualiza_posicao(self, pos):
+        self.minhaPosicao = pos[:]
+        self.repr_amb[pos[0]][pos[1]] = 'A'
+
     def busca_dfs(self):
         solucao = []
         acoes = [8, 9, 6, 3, 2, 1, 4, 7]
@@ -81,14 +85,14 @@ class Agente():
                     break
                 else:
                     print("Backtracking !")
-                    acao = unbacktracked[a_pos].pop(0)
+                    acao = unbacktracked[a_pos].pop(0)[1]
             if acao in self.acoes_possiveis():
                 pos_anterior = tuple(self.minhaPosicao)
                 self.mover(acao)
                 a_pos = tuple(self.minhaPosicao)
                 if a_pos not in unbacktracked:
                     unbacktracked[a_pos] = []
-                unbacktracked[a_pos].insert(0, pos_anterior)
+                unbacktracked[a_pos].insert(0, [pos_anterior, acao])
                 if pos_anterior not in result:
                     result[pos_anterior] = ()
                 result[pos_anterior][acao] = a_pos
@@ -135,9 +139,9 @@ class Agente():
 
             solucao.append(movimento)
             custo += 1 if movimento in custo1 else 1.5
-            print("acao: " + str(proximo[0]))
-            self.print_repr()
-            input()
+#            print("acao: " + str(proximo[0]))
+#            self.print_repr()
+#            input()
 
         print("Estimativas: " + str(self.est_h))
         print("Custo: " + str(custo))
@@ -253,3 +257,4 @@ class Agente():
             for col in range(self.colunaTamanho):
                 print(self.repr_amb[lin][col], end=" ")
             print()
+
