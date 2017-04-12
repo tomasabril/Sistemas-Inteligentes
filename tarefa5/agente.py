@@ -71,13 +71,15 @@ class Agente():
         unbacktracked = {}
 
         a_pos = tuple(self.minhaPosicao)
+        # inicializando dicionarios para todas as posições
+        for lin in range(self.linhaTamanho):
+            for col in range(self.colunaTamanho):
+                unbacktracked[tuple([lin, col])] = []
+                untried[tuple([lin, col])] = acoes[:]
+                result[tuple([lin, col])] = [0 for i in range(10)]
 
         while self.minhaPosicao != self.objetivo:
             backtrk = False
-            if a_pos not in untried:
-                untried[a_pos] = acoes[:]
-                result[a_pos] = [0 for i in range(10)]
-                unbacktracked[a_pos] = []
             if untried[a_pos]:
                 acao = untried[a_pos].pop(0)
             else:
@@ -88,7 +90,7 @@ class Agente():
                     print("Backtracking !")
 #                    acao = unbacktracked[a_pos].pop(0)[1]
                     pra_onde_ir = unbacktracked[a_pos].pop(0)
-                    acao = result[a_pos].index(pra_onde_ir[0])
+                    acao = result[a_pos].index(pra_onde_ir)
                     backtrk = True
             if acao in self.acoes_possiveis():
                 pos_anterior = tuple(self.minhaPosicao)
@@ -97,17 +99,19 @@ class Agente():
                 if a_pos not in unbacktracked:
                     unbacktracked[a_pos] = []
                 if not backtrk:
-                    unbacktracked[a_pos].insert(0, [pos_anterior, acao])
+                    unbacktracked[a_pos].insert(0, pos_anterior)
                 if pos_anterior not in result:
                     result[pos_anterior] = ()
                 result[pos_anterior][acao] = a_pos
-                print("untried: " + str(untried[pos_anterior]))
+                print("untried anterior: " + str(untried[pos_anterior]))
             else:
                 result[a_pos][acao] = a_pos
-                print("untried: " + str(untried[a_pos]))
+                print("untried anterior: " + str(untried[a_pos]))
             solucao.append(acao)
             custo += 1 if acao in custo1 else 1.5
-            print("acao: " + str(acao))
+            print("acao para chegar aqui: " + str(acao))
+#            print("untried daqui: " + str(untried[a_pos]))
+            print("unbacktracked daqui: " + str(unbacktracked[a_pos]))
             self.print_repr()
             input()
 
