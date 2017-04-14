@@ -23,7 +23,10 @@ Busca informada
 Busca online
 
 - DFS
-- LRTA
+- LRTA*
 
+### Tarefa 6
+Busca Local
 
+- Hill Climbing
 
