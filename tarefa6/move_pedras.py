@@ -30,6 +30,10 @@ class Main():
         ax2 = fig.add_subplot(412)
         ax3 = fig.add_subplot(413)
         ax4 = fig.add_subplot(414)
+        ax1.set_ylabel("conflitos")
+        ax2.set_ylabel("conflitos")
+        ax3.set_ylabel("conflitos")
+        ax4.set_ylabel("conflitos")
 
         lista = self.ini_rand_inlist()
 
@@ -95,16 +99,22 @@ class Main():
     def hill_climb_all_permutations(self, lista):
         print("\n> executando hill_climb_all_permutations")
         func_time = time.time()
-        conflitos = []
-        vezes = 0
-        x = 10
-        while x:
-            vizinhos = list(itertools.permutations(lista))
-            vizinhos.sort(key=self.avaliar_inlist)
-            atual = vizinhos.pop(0)
-            x = self.avaliar_inlist(atual)
-            conflitos.append(x)
-            vezes += 1
+        conflitos = [0]
+        vezes = 1
+        
+        vizinhos = list(itertools.permutations(lista))
+        
+        # reordenar tudo parece ser lento
+        # demora 0,2 segundos. 10x mais que fazer todas as permutacoes
+#        vizinhos.sort(key=self.avaliar_inlist)
+#        atual = vizinhos.pop(0) 
+
+        # pegando o primeiro com 0 conflitos, ficou 5 vezes mais rapido assim
+        for item in vizinhos:
+            if self.avaliar_inlist(item) == 0:
+                atual = item
+                break
+
         self.print_inlist(list(atual))
         time_t = time.time() - func_time
         print("--- total time: " + str(time_t))
