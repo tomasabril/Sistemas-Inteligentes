@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ----------------
-# Tomรกs Abril
+# Tomás Abril
 # ----------------
 
 import random
@@ -44,8 +44,8 @@ class Main():
 
         print("\n--- %s seconds ---" % (time.time() - self.start_time))
 
-    def genetico_decimal(self)
-        print("\n> executando hill_climb")
+    def genetico_decimal(self):
+        print("\n> executando genetico_decimal")
         func_time = time.time()
         
         populacao = 50
@@ -60,12 +60,31 @@ class Main():
         
         
         
-        self.print_inlist(lista)
+        # imprimindo a população
+        for bixo in bixos:
+            self.print_inlist(bixo)
+            print()
+
         time_t = time.time() - func_time
         print("--- total time: " + str(time_t))
         print("time per generation: " + str(time_t/geracoes))
         return (melhor_por_geracao, geracoes)
-        
+
+    def mutacao_posicao(self, lista):
+        print("ainda nao implementado")
+        pass
+
+    def mutacao_ordem(self, lista):
+        chance = 0.05
+        if random.uniform(0, 1) > chance:
+            pos1 = random.randrange(0, len(lista))
+            pos2 = random.randrange(0, len(lista))
+            lista[pos1], lista[pos2] = lista[pos2], lista[pos1]
+        return lista
+
+    def mutacao_aleatoria(self, lista):
+        print("ainda nao implementado")
+        pass
 
     def random_shuffle(self, lista):
         print("\n> executando random_shuffle")
