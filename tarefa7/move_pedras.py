@@ -29,17 +29,17 @@ class Main():
 
         lista = self.ini_rand_inlist()
 
-        conf_r, vez_r = self.random_shuffle(lista)
-        print("iteracoes: " + str(vez_r))
-
-        conf_r, vez_r = self.random_shuffle_inlist(lista[:])
-        print("iteracoes: " + str(vez_r))
-
-        conf_hc, vez_hc = self.hill_climb_all_permutations(lista[:])
-        print("iteracoes: " + str(vez_hc))
-
-        conf_hc, vez_hc = self.hill_climb(lista[:])
-        print("iteracoes: " + str(vez_hc))
+#        conf_r, vez_r = self.random_shuffle(lista)
+#        print("iteracoes: " + str(vez_r))
+#
+#        conf_r, vez_r = self.random_shuffle_inlist(lista[:])
+#        print("iteracoes: " + str(vez_r))
+#
+#        conf_hc, vez_hc = self.hill_climb_all_permutations(lista[:])
+#        print("iteracoes: " + str(vez_hc))
+#
+#        conf_hc, vez_hc = self.hill_climb(lista[:])
+#        print("iteracoes: " + str(vez_hc))
 
         conf_gd, vez_gd = self.genetico_decimal()
         print("iteracoes: " + str(vez_gd))
@@ -50,33 +50,81 @@ class Main():
         print("\n> executando algoritmo genetico_decimal")
         func_time = time.time()
 
-        populacao = 3
-        pcross = 0.8
+        populacao = 300
+        pcross = 0.85
         pmut = 0.05
         melhor_por_geracao = []
-        geracoes = 1
+        geracoes = 0
         conft = 10
         pares = []
-        
+
         # inicializando geração 1
         # [ [5,6,1,3,2,4,8,9,7], [outro] ]
         bixos = [self.ini_rand_inlist() for _ in range(populacao)]
-        print(bixos)
-        while(True):
-            fit_list = [self.avaliar_inlist(x) for x in bixos]
-            conft = min(fit_list)
-            if not conft:
-                break
-            pares.clear()
-            #for i in enumerate(bixos):
-            escolhido = self.roleta_genetica(bixos, fit_list)
-            print(escolhido)
-            break
+#        print(bixos)
 
-        # imprimindo a população
-        for bixo in bixos:
-            self.print_inlist(bixo)
-            print()
+        while(geracoes < 5000):
+            geracoes += 1
+            # avaliar fitness
+            fit_list = [self.avaliar_inlist(x) for x in bixos]
+
+            # ver se tem alguem que soluciona
+            conft = min(fit_list)
+            melhor_por_geracao.append(conft)
+            if not conft:
+                self.print_inlist(bixos[fit_list.index(conft)])
+                break
+
+            # fazendo cruzamento
+            # criando pares
+            pares.clear()
+            for i in range(populacao//2):
+                escolhido1 = self.roleta_genetica(bixos, fit_list)
+                escolhido2 = self.roleta_genetica(bixos, fit_list)
+                pares.append([escolhido1, escolhido2])
+#                print("pares: ")
+#                print(pares)
+            # cruzamento entre os pares
+            filhos = []
+            for par in pares:
+                if random.uniform(0, 1) < pcross:
+                    ponto_de_cross = random.randint(1, len(par[0])-1)
+                    filho1 = par[0][:ponto_de_cross] + par[1][ponto_de_cross:]
+                    filho2 = par[1][:ponto_de_cross] + par[0][ponto_de_cross:]
+#                    print("filhos: pto cross:" + str(ponto_de_cross))
+                    
+                    # corrigindo duplicações
+#                    print("filho1 antes da correção " + str(filho1))
+                    for i, gene in enumerate(filho1):
+                        if gene in filho1[i+1:]:
+                            filho1[i] = list(set([x for x in range(9)]) - set(filho1)).pop()
+#                    print("filho2 antes da correção " + str(filho2))
+                    for i, gene in enumerate(filho2):
+                        if gene in filho2[i+1:]:
+                            filho2[i] = list(set([x for x in range(9)]) - set(filho2)).pop()
+                    # mutando filhos
+#                    print("filho1 antes mutação " + str(filho1))
+#                    print("filho2 antes mutação " + str(filho2))
+                    filho1 = self.mutacao_ordem(filho1, pmut)
+                    filho2 = self.mutacao_ordem(filho2, pmut)
+                    filhos.append(filho1)
+                    filhos.append(filho2)
+#                    print(filhos)
+            # juntando filhos aos pais
+            bixos.extend(filhos)
+#            print(bixos)
+            # cortando para deixar apenas os melhores
+            bixos.sort(key=self.avaliar_inlist)
+            bixos = bixos[:populacao]
+#            print("os melhores")
+#            print(bixos)
+
+#        # imprimindo a população
+#        for bixo in bixos:
+#            self.print_inlist(bixo)
+#            print()
+        else:
+            print("Não encontrou soluçao ")
 
         time_t = time.time() - func_time
         print("--- total time: " + str(time_t))
@@ -87,12 +135,13 @@ class Main():
         print("ainda nao implementado")
         pass
 
-    def mutacao_ordem(self, lista):
-        chance = 0.05
-        if random.uniform(0, 1) > chance:
-            pos1 = random.randrange(0, len(lista))
-            pos2 = random.randrange(0, len(lista))
-            lista[pos1], lista[pos2] = lista[pos2], lista[pos1]
+    def mutacao_ordem(self, lista, chance):
+        for i in range(len(lista)):
+            if random.uniform(0, 1) < chance:
+#                print("Mutando !!")
+                pos1 = random.randrange(0, len(lista))
+                pos2 = random.randrange(0, len(lista))
+                lista[pos1], lista[pos2] = lista[pos2], lista[pos1]
         return lista
 
     def mutacao_aleatoria(self, lista):
@@ -102,20 +151,19 @@ class Main():
     def roleta_genetica(self, bixos, fitlist):
         fitlist = [1/x for x in fitlist]
         totalfit = sum(fitlist)
-#        fitperc = [0 for _ in fitlist]
-#        fitperc[0] = fitlist[0]/totalfit*100
-#        for i in range(1, len(fitlist)):
-#            fitperc[i] = fitperc[i-1] + fitlist[i]/totalfit*100
+#        print("total fit " + str(totalfit))
+#        print("fitlist " + str(fitlist))
 
         marcador = random.uniform(0, totalfit)
+#        print("marcador " + str(marcador))
         for i, bxo, in enumerate(fitlist):
-            if marcador <= 0:
-                break
             marcador -= bxo
-        vencedor = bixos[i]        
-        
-        return vencedor
-
+            if marcador <= 0:
+#                print("o escolhido foi: " + str(bixos[i]))
+                return bixos[i]
+        else:
+            print("passou por tudo e nao escolheu")
+            return bixos[i]
 
     def random_shuffle(self, lista):
         print("\n> executando random_shuffle")
@@ -156,13 +204,13 @@ class Main():
         func_time = time.time()
         conflitos = [0]
         vezes = 1
-        
+
         vizinhos = list(itertools.permutations(lista))
-        
+
         # reordenar tudo parece ser lento
         # demora 0,2 segundos. 10x mais que fazer todas as permutacoes
 #        vizinhos.sort(key=self.avaliar_inlist)
-#        atual = vizinhos.pop(0) 
+#        atual = vizinhos.pop(0)
 
         # pegando o primeiro com 0 conflitos, ficou 5 vezes mais rapido assim
         for item in vizinhos:
