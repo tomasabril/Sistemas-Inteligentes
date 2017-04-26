@@ -30,3 +30,8 @@ Busca Local
 
 - Hill Climbing
 
+### Tarefa 7
+
+- Algoritmo Genetico
+
+

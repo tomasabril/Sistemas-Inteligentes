@@ -50,7 +50,7 @@ class Main():
         print("\n> executando algoritmo genetico_decimal")
         func_time = time.time()
 
-        populacao = 300
+        populacao = 50
         pcross = 0.85
         pmut = 0.05
         melhor_por_geracao = []
@@ -75,7 +75,7 @@ class Main():
                 break
 
             # fazendo cruzamento
-            # criando pares
+            # ..criando pares
             pares.clear()
             for i in range(populacao//2):
                 escolhido1 = self.roleta_genetica(bixos, fit_list)
@@ -86,20 +86,17 @@ class Main():
             filhos = []
             for par in pares:
                 if random.uniform(0, 1) < pcross:
-                    ponto_de_cross = random.randint(1, len(par[0])-1)
-                    filho1 = par[0][:ponto_de_cross] + par[1][ponto_de_cross:]
-                    filho2 = par[1][:ponto_de_cross] + par[0][ponto_de_cross:]
+                    # crossover
+                    filho1, filho2 = self.crossover_simples(par[0], par[1])
                     
                     # corrigindo duplicações
-                    for i, gene in enumerate(filho1):
-                        if gene in filho1[i+1:]:
-                            filho1[i] = list(set([x for x in range(9)]) - set(filho1)).pop()
-                    for i, gene in enumerate(filho2):
-                        if gene in filho2[i+1:]:
-                            filho2[i] = list(set([x for x in range(9)]) - set(filho2)).pop()
+                    filho1 = self.corrige_duplicados(filho1)
+                    filho2 = self.corrige_duplicados(filho2)
+
                     # mutando filhos
                     filho1 = self.mutacao_ordem(filho1, pmut)
                     filho2 = self.mutacao_ordem(filho2, pmut)
+
                     filhos.append(filho1)
                     filhos.append(filho2)
             # juntando filhos aos pais
@@ -115,6 +112,22 @@ class Main():
         print("--- total time: " + str(time_t))
         print("time per generation: " + str(time_t/geracoes))
         return (melhor_por_geracao, geracoes)
+
+    def corrige_duplicados(self, cromossomo):
+        for i, gene in enumerate(cromossomo):
+            if gene in cromossomo[i+1:]:
+                cromossomo[i] = list(set([x for x in range(9)]) - set(cromossomo)).pop()
+        return cromossomo
+
+    def crossover_simples(self, crmsm1, crmsm2):
+        ponto_de_cross = random.randint(1, len(crmsm1)-1)
+        filho1 = crmsm1[:ponto_de_cross] + crmsm2[ponto_de_cross:]
+        filho2 = crmsm2[:ponto_de_cross] + crmsm1[ponto_de_cross:]
+        return filho1, filho2
+
+    def crossover_pmx(self, crmsm1, crmsm2):
+    
+        pass
 
     def mutacao_posicao(self, lista):
         print("ainda nao implementado")
@@ -138,7 +151,6 @@ class Main():
         totalfit = sum(fitlist)
 #        print("total fit " + str(totalfit))
 #        print("fitlist " + str(fitlist))
-
         marcador = random.uniform(0, totalfit)
 #        print("marcador " + str(marcador))
         for i, bxo, in enumerate(fitlist):
