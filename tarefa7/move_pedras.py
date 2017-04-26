@@ -3,6 +3,8 @@
 # ----------------
 # Tomรกs Abril
 # ----------------
+# NAO ESTA PRONTO AINDA
+# !!!
 
 import random
 import time
@@ -44,28 +46,58 @@ class Main():
 
         print("\n--- %s seconds ---" % (time.time() - self.start_time))
 
-    def genetico_decimal(self)
-        print("\n> executando hill_climb")
+    def genetico_decimal(self):
+        print("\n> executando algoritmo genético")
         func_time = time.time()
         
-        populacao = 50
+        populacao = 3
+        pcross = 0.8
+        pmut = 0.05
         melhor_por_geracao = []
         geracoes = 1
         conft = 10
+        pares = []
         
         # inicializando geração 1
         # [ [5,6,1,3,2,4,8,9,7], [outro] ]
-        bixos = []
         bixos = [self.ini_rand_inlist() for _ in range(populacao)]
+        print(bixos)
+        while(True):
+            fit_list = [self.avaliar_inlist(x) for x in bixos]
+            conft = min(fit_list)
+            if not conft:
+                break
+            pares.clear()
+            #for i in enumerate(bixos):
+            escolhido = self.roleta_genetica(bixos, fit_list)
+            print(escolhido)
+            break
         
         
-        
-        self.print_inlist(lista)
+        #self.print_inlist(bixos[fit_list.index(0)])
         time_t = time.time() - func_time
         print("--- total time: " + str(time_t))
         print("time per generation: " + str(time_t/geracoes))
         return (melhor_por_geracao, geracoes)
         
+
+    def roleta_genetica(self, bixos, fitlist):
+        fitlist = [1/x for x in fitlist]
+        totalfit = sum(fitlist)
+#        fitperc = [0 for _ in fitlist]
+#        fitperc[0] = fitlist[0]/totalfit*100
+#        for i in range(1, len(fitlist)):
+#            fitperc[i] = fitperc[i-1] + fitlist[i]/totalfit*100
+
+        marcador = random.uniform(0, totalfit)
+        for i, bxo, in enumerate(fitlist):
+            if marcador <= 0:
+                break
+            marcador -= bxo
+        vencedor = bixos[i]        
+        
+        return vencedor
+
 
     def random_shuffle(self, lista):
         print("\n> executando random_shuffle")
