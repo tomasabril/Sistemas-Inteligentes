@@ -29,17 +29,17 @@ class Main():
 
         lista = self.ini_rand_inlist()
 
-#        conf_r, vez_r = self.random_shuffle(lista)
-#        print("iteracoes: " + str(vez_r))
-#
-#        conf_r, vez_r = self.random_shuffle_inlist(lista[:])
-#        print("iteracoes: " + str(vez_r))
-#
-#        conf_hc, vez_hc = self.hill_climb_all_permutations(lista[:])
-#        print("iteracoes: " + str(vez_hc))
-#
-#        conf_hc, vez_hc = self.hill_climb(lista[:])
-#        print("iteracoes: " + str(vez_hc))
+        conf_r, vez_r = self.random_shuffle(lista)
+        print("iteracoes: " + str(vez_r))
+
+        conf_r, vez_r = self.random_shuffle_inlist(lista[:])
+        print("iteracoes: " + str(vez_r))
+
+        conf_hc, vez_hc = self.hill_climb_all_permutations(lista[:])
+        print("iteracoes: " + str(vez_hc))
+
+        conf_hc, vez_hc = self.hill_climb(lista[:])
+        print("iteracoes: " + str(vez_hc))
 
         conf_gd, vez_gd = self.genetico_decimal()
         print("iteracoes: " + str(vez_gd))
@@ -61,7 +61,6 @@ class Main():
         # inicializando geração 1
         # [ [5,6,1,3,2,4,8,9,7], [outro] ]
         bixos = [self.ini_rand_inlist() for _ in range(populacao)]
-#        print(bixos)
 
         while(geracoes < 5000):
             geracoes += 1
@@ -82,8 +81,7 @@ class Main():
                 escolhido1 = self.roleta_genetica(bixos, fit_list)
                 escolhido2 = self.roleta_genetica(bixos, fit_list)
                 pares.append([escolhido1, escolhido2])
-#                print("pares: ")
-#                print(pares)
+
             # cruzamento entre os pares
             filhos = []
             for par in pares:
@@ -91,38 +89,25 @@ class Main():
                     ponto_de_cross = random.randint(1, len(par[0])-1)
                     filho1 = par[0][:ponto_de_cross] + par[1][ponto_de_cross:]
                     filho2 = par[1][:ponto_de_cross] + par[0][ponto_de_cross:]
-#                    print("filhos: pto cross:" + str(ponto_de_cross))
                     
                     # corrigindo duplicações
-#                    print("filho1 antes da correção " + str(filho1))
                     for i, gene in enumerate(filho1):
                         if gene in filho1[i+1:]:
                             filho1[i] = list(set([x for x in range(9)]) - set(filho1)).pop()
-#                    print("filho2 antes da correção " + str(filho2))
                     for i, gene in enumerate(filho2):
                         if gene in filho2[i+1:]:
                             filho2[i] = list(set([x for x in range(9)]) - set(filho2)).pop()
                     # mutando filhos
-#                    print("filho1 antes mutação " + str(filho1))
-#                    print("filho2 antes mutação " + str(filho2))
                     filho1 = self.mutacao_ordem(filho1, pmut)
                     filho2 = self.mutacao_ordem(filho2, pmut)
                     filhos.append(filho1)
                     filhos.append(filho2)
-#                    print(filhos)
             # juntando filhos aos pais
             bixos.extend(filhos)
-#            print(bixos)
             # cortando para deixar apenas os melhores
             bixos.sort(key=self.avaliar_inlist)
             bixos = bixos[:populacao]
-#            print("os melhores")
-#            print(bixos)
 
-#        # imprimindo a população
-#        for bixo in bixos:
-#            self.print_inlist(bixo)
-#            print()
         else:
             print("Não encontrou soluçao ")
 
