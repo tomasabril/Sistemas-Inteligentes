@@ -3,13 +3,10 @@
 # ----------------
 # Tomás Abril
 # ----------------
-# NAO ESTA PRONTO AINDA
-# !!!
 
 import random
 import time
 import itertools
-
 
 
 class Main():
