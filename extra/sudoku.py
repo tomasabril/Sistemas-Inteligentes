@@ -11,14 +11,17 @@ Created on Sat Apr 29 19:05:52 2017
 import random
 import time
 import itertools
-#import matplotlib.pyplot as plt
 
 
 class Main():
 
     def __init__(self):
         #
+        # se True, faz grafico dos conflitos por loop com matplotlib
         graficos = False
+        # se True, imprime no terminal o progresso
+        self.terminal = False
+        # ------------------------
         # linhas e colunas do campo
         grid = [x for x in range(9*9)]
         campolc = []
@@ -195,9 +198,11 @@ class Main():
                 contador_de_parada = 0
                 minx = x
             # para imprimir no terminal --------- ---
-#                print()
-#                print(x, end='')
-#            print('.', end='', flush=True)
+                if self.terminal:
+                    print()
+                    print(x, end='')
+            if self.terminal:
+                print('.', end='', flush=True)
             # ----------------------------------- ---
             if x == minx:
                 contador_de_parada += 1
@@ -239,11 +244,12 @@ class Main():
             atual = viz[idmin]
             x = self.conflitos(atual, campolc)
             # para imprimir no terminal --------- ---
-#            if x < minx:
-#                minx = x
-#                print()
-#                print(x, end='')
-#            print('.', end='', flush=True)
+            if self.terminal:
+                if x < minx:
+                    minx = x
+                    print()
+                    print(x, end='')
+                print('.', end='', flush=True)
             # ----------------------------------- ---
             vezes += 1
             conflitos_list.append(x)
@@ -310,12 +316,13 @@ class Main():
             estados.sort(key=lambda x: self.conflitos(x, campolc), reverse=False)
             estados = estados[:populacao]
             # para imprimir no terminal --------- ---
-#            conft = self.conflitos(estados[0], campolc)
-#            if conft < minc:
-#                minc = conft
-#                print()
-#                print(conft, end='')
-#            print('.', end='', flush=True)
+            if self.terminal:
+                conft = self.conflitos(estados[0], campolc)
+                if conft < minc:
+                    minc = conft
+                    print()
+                    print(conft, end='')
+                print('.', end='', flush=True)
             # ----------------------------------- ---
         else:
             print("\nparando ... ainda não encontrou soluçao")
@@ -455,11 +462,12 @@ class Main():
                 self.print_grid(grid)
                 break
             # para imprimir no terminal --------- ---
-#            if c < cmin:
-#                cmin = c
-#                print()
-#                print(c, end='')
-#            print('.', end='', flush=True)
+            if self.terminal:
+                if c < cmin:
+                    cmin = c
+                    print()
+                    print(c, end='')
+                print('.', end='', flush=True)
             # ----------------------------------- ---
             if vezes > 10000:
                 print("\nParando depois de {} vezes".format(vezes))
@@ -480,9 +488,10 @@ class Main():
                 grid[i] = numeros[self.grupo(campolc[i])].pop()
             c = self.conflitos(grid, campolc)
             # para imprimir no terminal
-#            if c < cmin:
-#                cmin = c
-#                print(cmin)
+            if self.terminal:
+                if c < cmin:
+                    cmin = c
+                    print(cmin)
             cftlist.append(c)
             cont += 1
             if not c:
