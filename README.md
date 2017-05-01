@@ -34,4 +34,12 @@ Busca Local
 
 - Algoritmo Genetico
 
+### Extra
+Sudoku
+
+- Feixe local / Local Beam Search
+- Hill Climb
+- Genetico
+- random
+- all permutations
 

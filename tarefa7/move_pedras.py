@@ -8,6 +8,7 @@ import random
 import time
 import itertools
 
+graficos = True
 
 class Main():
 
@@ -29,11 +30,11 @@ class Main():
         conf_r, vez_r = self.random_shuffle(lista)
         print("iteracoes: " + str(vez_r))
 
-        conf_r, vez_r = self.random_shuffle_inlist(lista[:])
-        print("iteracoes: " + str(vez_r))
+        conf_ri, vez_ri = self.random_shuffle_inlist(lista[:])
+        print("iteracoes: " + str(vez_ri))
 
-        conf_hc, vez_hc = self.hill_climb_all_permutations(lista[:])
-        print("iteracoes: " + str(vez_hc))
+        conf_hca, vez_hca = self.hill_climb_all_permutations(lista[:])
+        print("iteracoes: " + str(vez_hca))
 
         conf_hc, vez_hc = self.hill_climb(lista[:])
         print("iteracoes: " + str(vez_hc))
@@ -42,6 +43,34 @@ class Main():
         print("iteracoes: " + str(vez_gd))
 
         print("\n--- %s seconds ---" % (time.time() - self.start_time))
+        
+        if(graficos):
+            import matplotlib.pyplot as plt
+            fig = plt.figure()
+            ax1 = fig.add_subplot(511)
+            ax2 = fig.add_subplot(512)
+            ax3 = fig.add_subplot(513)
+            ax4 = fig.add_subplot(514)
+            ax5 = fig.add_subplot(515)
+            ax1.set_ylabel("conflitos")
+            ax2.set_ylabel("conflitos")
+            ax3.set_ylabel("conflitos")
+            ax4.set_ylabel("conflitos")
+            ax5.set_ylabel("conflitos")
+            
+            ax1.plot(conf_r)
+            ax1.set_title("random 1")
+            ax2.plot(conf_ri)
+            ax2.set_title("random 2")
+            ax3.plot(conf_hca)
+            ax3.set_title("all permutations")
+            ax4.plot(conf_hc)
+            ax4.set_title("hill climb")
+            ax5.plot(conf_gd)
+            ax5.set_title("genetico")
+            fig.tight_layout()
+            plt.show()
+        
 
     def genetico_decimal(self):
         print("\n> executando algoritmo genetico_decimal")
@@ -196,7 +225,7 @@ class Main():
     def hill_climb_all_permutations(self, lista):
         print("\n> executando hill_climb_all_permutations")
         func_time = time.time()
-        conflitos = [0]
+        conflitos = [0, 0]
         vezes = 1
 
         vizinhos = list(itertools.permutations(lista))

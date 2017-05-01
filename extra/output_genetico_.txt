@@ -1,0 +1,5 @@
+Script started on dom 30 abr 2017 15:08:02 -03
+]0;samot@tarch:~/git/Sistemas-Inteligentes/extra[samot@tarch extra]$ exit
+exit
+
+Script done on dom 30 abr 2017 15:08:05 -03

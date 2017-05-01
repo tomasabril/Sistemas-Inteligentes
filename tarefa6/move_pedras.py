@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ----------------
-# Tomรกs Abril
+# Tomás Abril
 # ----------------
 
 import random
