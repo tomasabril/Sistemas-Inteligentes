@@ -59,66 +59,6 @@ class Agente():
         self.minhaPosicao = pos[:]
         self.repr_amb[pos[0]][pos[1]] = 'A'
 
-    def busca_dfs(self):
-        solucao = []
-        acoes = [8, 9, 6, 3, 2, 1, 4, 7]
-        custo = 0
-        custo1 = (8, 4, 6, 2)
-        custo15 = (7, 9, 1, 3)
-        # { (linha, coluna) : [coisas, daquela, posicao] }
-        result = {}
-        untried = {}
-        unbacktracked = {}
-
-        a_pos = tuple(self.minhaPosicao)
-        # inicializando dicionarios para todas as posições
-        for lin in range(self.linhaTamanho):
-            for col in range(self.colunaTamanho):
-                unbacktracked[tuple([lin, col])] = []
-                untried[tuple([lin, col])] = acoes[:]
-                result[tuple([lin, col])] = [0 for i in range(10)]
-
-        while self.minhaPosicao != self.objetivo:
-            backtrk = False
-            if untried[a_pos]:
-                acao = untried[a_pos].pop(0)
-            else:
-                if not unbacktracked[a_pos]:
-                    print ("Sem acoes para fazer, acabou a lista de unbacktracked")
-                    break
-                else:
-                    print("Backtracking !")
-#                    acao = unbacktracked[a_pos].pop(0)[1]
-                    pra_onde_ir = unbacktracked[a_pos].pop(0)
-                    acao = result[a_pos].index(pra_onde_ir)
-                    backtrk = True
-            if acao in self.acoes_possiveis():
-                pos_anterior = tuple(self.minhaPosicao)
-                self.mover(acao)
-                a_pos = tuple(self.minhaPosicao)
-                if a_pos not in unbacktracked:
-                    unbacktracked[a_pos] = []
-                if not backtrk:
-                    unbacktracked[a_pos].insert(0, pos_anterior)
-                if pos_anterior not in result:
-                    result[pos_anterior] = ()
-                result[pos_anterior][acao] = a_pos
-                print("untried anterior: " + str(untried[pos_anterior]))
-            else:
-                result[a_pos][acao] = a_pos
-                print("untried anterior: " + str(untried[a_pos]))
-            solucao.append(acao)
-            custo += 1 if acao in custo1 else 1.5
-            print("acao para chegar aqui: " + str(acao))
-#            print("untried daqui: " + str(untried[a_pos]))
-            print("unbacktracked daqui: " + str(unbacktracked[a_pos]))
-            self.print_repr()
-            input()
-
-        print("Custo: " + str(custo))
-        print("função result: ")
-        print(result)
-        return solucao
 
     def busca_lrta(self, inicializar_h = False):
         solucao = []

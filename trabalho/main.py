@@ -13,26 +13,32 @@ import arvore
 
 def main():
 
-    linha = 5
-    coluna = 5
+    linha = 9
+    coluna = 9
 
     amb = ambiente.Ambiente(linha, coluna)
 
     # criando paredes como no pdf
-    paredes = [[2, 1], [1, 1], [3, 1],
-               [1, 2], [3, 2], [1, 3]
+    paredes = [[0, 0], [0, 1], [0, 4], [0, 5], [0, 6], [0, 7],
+               [1, 0],
+               [2, 3], [2, 4], [2, 5],
+               [3, 3], [3, 4], [3, 5], [3, 6], 
+               [5, 2], [5, 5], [5, 7],
+               [6, 1], [6, 4], [6, 5], [6, 7],
+               [7, 1], [7, 4], [7, 7],
+               [8, 1], [8, 2],
                ]
 
     for i in range(len(paredes)):
         amb.add_obstaculo(paredes[i][0], paredes[i][1])
 
-    pos_inicial = [2, 0]
-    pos_objetivo = [2, 2]
+    pos_inicial = [8, 0]
+    pos_objetivo = [2, 6]
     agt = agente.Agente(pos_inicial, amb.get_ambiente(), amb.andavel, amb.parede)
     agt.set_objetivo(pos_objetivo)
     amb.set_agente(agt.minhaPosicao)
 
-    qual = int(input("1 para DFS \n0 para LRTA*: "))
+    print("Executando LRTA*")
 
     vezes = 0
     fim = ""
@@ -48,19 +54,15 @@ def main():
         print("posicao do agente" + str(agt.get_posicao()))
         print("objetivo: " + str(agt.objetivo))
 
-        if qual == 1:
-            print("executando DFS ...")
-            agt.set_comandos(agt.busca_dfs())
+        print("executando LRTA* ... \n")
+        if vezes == 0:
+            agt.set_comandos(agt.busca_lrta(inicializar_h=True))
         else:
-            print("executando LRTA* ... \n")
-            if vezes == 0:
-                agt.set_comandos(agt.busca_lrta(inicializar_h=True))
-            else:
-                agt.set_comandos(agt.busca_lrta())
+            agt.set_comandos(agt.busca_lrta())
 
         print("\nnumero de espacos vazios: " + str(linha * coluna - len(paredes)))
         print("solucao: " + str(agt.comandos))
-#       agt.executa_cmds()
+
         print("ambiente no fim: ")
         amb.print_ambiente()
         print(amb.get_agentpos())
