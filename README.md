@@ -43,3 +43,10 @@ Sudoku
 - random
 - all permutations
 
+### Trabalho
+Agente no grid2d com frutas
+python, wekka
+
+- LRTA*
+- ID3
+
