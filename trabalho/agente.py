@@ -18,6 +18,7 @@ class Agente():
     comandos = []
     # estimativa h { (linha, coluna): estimativa }
     est_h = {}
+    energia = 300
 
 
     def __init__(self, agentepos, ambiente, andavel, parede):

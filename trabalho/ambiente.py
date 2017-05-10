@@ -20,6 +20,9 @@ class Ambiente():
         self.grid = [['_' for i in range(colunas)] for j in range(linhas)]
         # cada linha tem varias colunas
 
+    def colocar_frutas(self):
+        pass
+
     def print_ambiente(self):
         # print('\n'.join(map(str, self.grid)))
         print("  ", end='')
