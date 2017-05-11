@@ -2,7 +2,7 @@
 # Allan Patrick
 
 import random
-
+import fruta
 
 class Ambiente():
     grid = []
@@ -21,7 +21,18 @@ class Ambiente():
         # cada linha tem varias colunas
 
     def colocar_frutas(self):
-        pass
+        ''' (linha, coluna): fruta
+        '''
+        self.frutas = {}
+        for lin in range(self.linhaTamanho):
+            for col in range(self.colunaTamanho):
+                if self.grid[lin][col] in self.andavel:
+                    self.frutas[(lin, col)] = fruta.Fruta()
+        return self.frutas
+
+    def reset_frutas(self):
+        for pos, fr in self.frutas.items():
+            fr.aqui = True
 
     def print_ambiente(self):
         # print('\n'.join(map(str, self.grid)))

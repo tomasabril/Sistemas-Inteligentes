@@ -6,6 +6,7 @@
 import math
 import arvore
 import random
+import fruta
 
 class Agente():
    # representação do ambiente
@@ -21,13 +22,19 @@ class Agente():
     energia = 300
 
 
-    def __init__(self, agentepos, ambiente, andavel, parede):
+    def __init__(self, agentepos, ambiente, andavel, parede, frutas):
         self.repr_amb = ambiente
         self.minhaPosicao = agentepos[:]
         self.linhaTamanho = len(ambiente)
         self.colunaTamanho = len(ambiente[0])
         self.andavel = andavel
         self.parede = parede
+        self.frutas = frutas
+        self.bolso = []
+
+    def reinicializar(self):
+        self.energia = 300
+        self.bolso.clear()
 
     def set_comandos(self, lista):
         self.comandos = lista[:]
@@ -75,6 +82,9 @@ class Agente():
                     # euristica euclidiana
                     self.est_h[tuple([lin, col])] = math.sqrt(abs(lin - self.objetivo[0])**2 + abs(col- self.objetivo[1])**2)
         while self.minhaPosicao != self.objetivo:
+            if self.energia < 0:
+                print('Morri !!')
+                break
             proximo.clear()
             for acao in self.acoes_com_result(self.minhaPosicao):
                 pos_resultante = (acao[1][0], acao[1][1])
@@ -90,12 +100,40 @@ class Agente():
             solucao.append(movimento)
             custo += 1 if movimento in custo1 else 1.5
 #            print("acao: " + str(proximo[0]))
-#            self.print_repr()
-#            input()
+            self.print_repr()
+            print('energia: {}'.format(self.energia))
+            print('frutas no bolso: {}'.format(len(self.bolso)))
+            input()
 
-        print("Estimativas: " + str(self.est_h))
+#        print("Estimativas: " + str(self.est_h))
         print("Custo: " + str(custo))
         return solucao
+
+    def ver_fruta(self):
+        ''' O que fazer quando ver uma fruta.
+
+        '''
+        # comer ou nao aleatoriamente
+        ant = self.energia
+        if self.frutas[tuple(self.minhaPosicao)].aqui:
+            if random.random() > 0.2:
+                print('Comendo')
+                self.energia += self.frutas[tuple(self.minhaPosicao)].comer()
+                self.energia -= 40
+            else:
+                # se não comeu pode talvez guardar
+                if random.random() > 0.8:
+                    print('Guardando')
+                    self.bolso.append(self.frutas[tuple(self.minhaPosicao)])
+                    self.frutas[tuple(self.minhaPosicao)].guardar()
+        # pode talvez ainda comer o que tem guardado
+        if self.bolso and random.random() > 0.4:
+            print('Comendo do bolso')
+            self.energia += self.bolso.pop(0).comer()
+            self.energia -= 40
+        depois = self.energia
+        delta = depois - ant
+        print('mudança de energia: {}'.format(delta))
 
     def acoes_possiveis(self):
         acoes = []
@@ -155,6 +193,7 @@ class Agente():
         return acoes
 
     def mover(self, movimento):
+        self.energia -= 100 - 5*len(self.bolso)
         if movimento == 7:
             self.repr_amb[self.minhaPosicao[0]][self.minhaPosicao[1]] = '+'
             self.minhaPosicao[0] -= 1
@@ -195,6 +234,7 @@ class Agente():
             self.minhaPosicao[0] += 1
             self.minhaPosicao[1] += 1
             self.repr_amb[self.minhaPosicao[0]][self.minhaPosicao[1]] = 'A'
+        self.ver_fruta()
 
     def print_repr(self):
         # print('\n'.join(map(str, self.grid)))
