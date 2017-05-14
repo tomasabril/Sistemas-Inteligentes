@@ -6,7 +6,7 @@ import fruta
 
 class Ambiente():
     grid = []
-    andavel = ['_', '.', 'o', '+', '░', '▢', '□', '◫']
+    andavel = ['_', '.', 'o', '+', '░', '▢', '□', '◫', 'X']
     parede = ['#', '█', '▇']
 
     # linha, coluna
@@ -28,9 +28,9 @@ class Ambiente():
             for col in range(self.colunaTamanho):
                 if self.grid[lin][col] in self.andavel:
                     self.frutas[(lin, col)] = fruta.Fruta()
-        return self.frutas
 
     def reset_frutas(self):
+        self.colocar_frutas()
         for pos, fr in self.frutas.items():
             fr.aqui = True
 

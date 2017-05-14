@@ -18,18 +18,17 @@ class Fruta():
 
 
     def __init__(self):
-        self.aqui = True
+#        self.aqui = True
         self.madureza = random.randint(1, 3)
         self.carboidratos = random.randint(1, 3)
         self.fibras = random.randint(1, 3)
         self.proteinas = random.randint(1, 3)
         self.lipideos = random.randint(1, 3)
-        self.energia = random.choice([30, 140, 200])
 
     def comer(self):
         '''Retorna quantidade de energia dependendo das caracteristicas da fruta
         '''
-        self.aqui = False
+#        self.aqui = False
         if self.lipideos > 1:
             if self.carboidratos > 1:
                 if self.madureza == 1:

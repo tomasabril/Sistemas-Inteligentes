@@ -7,6 +7,7 @@ import math
 import arvore
 import random
 import fruta
+import arff_creator
 
 class Agente():
    # representação do ambiente
@@ -20,7 +21,7 @@ class Agente():
     # estimativa h { (linha, coluna): estimativa }
     est_h = {}
     energia = 300
-
+    id3 = False
 
     def __init__(self, agentepos, ambiente, andavel, parede, frutas):
         self.repr_amb = ambiente
@@ -33,7 +34,7 @@ class Agente():
         self.bolso = []
 
     def reinicializar(self):
-        self.energia = 300
+        self.energia = 500
         self.bolso.clear()
 
     def set_comandos(self, lista):
@@ -69,6 +70,7 @@ class Agente():
 
 
     def busca_lrta(self, inicializar_h = False):
+        cheguei = 0
         solucao = []
         custo = 0
         custo1 = (8, 4, 6, 2)
@@ -77,14 +79,16 @@ class Agente():
         proximo = []
         # h { (linha, coluna) : estimativa }
         if inicializar_h:
+            # esvazia o arquivo
+            with open('energia-da-fruta.arff', 'w') as file:
+                pass
+            arff_creator.write_header()
+            # cria a euristica pro ambiente inteiro
             for lin in range(self.linhaTamanho):
                 for col in range(self.colunaTamanho):
                     # euristica euclidiana
                     self.est_h[tuple([lin, col])] = math.sqrt(abs(lin - self.objetivo[0])**2 + abs(col- self.objetivo[1])**2)
         while self.minhaPosicao != self.objetivo:
-            if self.energia < 0:
-                print('Morri !!')
-                break
             proximo.clear()
             for acao in self.acoes_com_result(self.minhaPosicao):
                 pos_resultante = (acao[1][0], acao[1][1])
@@ -100,40 +104,191 @@ class Agente():
             solucao.append(movimento)
             custo += 1 if movimento in custo1 else 1.5
 #            print("acao: " + str(proximo[0]))
-            self.print_repr()
-            print('energia: {}'.format(self.energia))
-            print('frutas no bolso: {}'.format(len(self.bolso)))
-            input()
+            if self.energia < 0:
+#                print('Morri !!')
+#                self.repr_amb[self.minhaPosicao[0]][self.minhaPosicao[1]] = 'X'
+                break
+#            self.print_repr()
+#            print('energia: {}'.format(self.energia))
+#            print('frutas no bolso: {}'.format(len(self.bolso)))
+
+#            input()
 
 #        print("Estimativas: " + str(self.est_h))
-        print("Custo: " + str(custo))
-        return solucao
+#        print("Custo: " + str(custo))
+        else:
+            cheguei = 1
+#            print('.', end='')
+        return solucao, cheguei
 
     def ver_fruta(self):
         ''' O que fazer quando ver uma fruta.
 
         '''
+        energ = 0
         # comer ou nao aleatoriamente
         ant = self.energia
-        if self.frutas[tuple(self.minhaPosicao)].aqui:
+        fruta_daqui = self.frutas[tuple(self.minhaPosicao)]
+        if not self.id3:
             if random.random() > 0.2:
-                print('Comendo')
-                self.energia += self.frutas[tuple(self.minhaPosicao)].comer()
+#            if True:
+#                    print('Comendo')
+                energ = fruta_daqui.comer()
+                self.energia += energ
                 self.energia -= 40
             else:
                 # se não comeu pode talvez guardar
-                if random.random() > 0.8:
-                    print('Guardando')
-                    self.bolso.append(self.frutas[tuple(self.minhaPosicao)])
-                    self.frutas[tuple(self.minhaPosicao)].guardar()
-        # pode talvez ainda comer o que tem guardado
-        if self.bolso and random.random() > 0.4:
-            print('Comendo do bolso')
-            self.energia += self.bolso.pop(0).comer()
-            self.energia -= 40
+                if self.energia > 400:
+#                        print('Guardando')
+                    self.bolso.append(fruta_daqui)
+                    fruta_daqui.guardar()
+        if self.id3:
+            if self.id3table_3(fruta_daqui):
+                if self.energia > 440:
+#                        print('Guardando')
+                    self.bolso.append(fruta_daqui)
+                    fruta_daqui.guardar()
+                else:
+#                        print('Comendo')
+                    energ = fruta_daqui.comer()
+                    self.energia += energ
+                    self.energia -= 40
+
+        if self.energia > 600:
+            self.energia = 600
         depois = self.energia
         delta = depois - ant
-        print('mudança de energia: {}'.format(delta))
+
+        # pode talvez ainda comer o que tem guardado
+        if self.bolso and self.energia < 440:
+#            print('Comendo do bolso')
+            self.energia += self.bolso.pop(0).comer()
+            self.energia -= 40
+
+        f = fruta_daqui
+        arff_creator.write_data(f.madureza, f.carboidratos, f.fibras, f.proteinas, f.lipideos, delta)
+#        print('mudança de energia: {}'.format(delta))
+
+    def id3table_3(self, frut):
+        ### madureza
+        # 1 verde
+        # 2 madura
+        # 3 podre
+        ### fibras, proteinas, lipideos
+        # 1 pouca
+        # 2 moderada
+        # 3 alta
+        proteinas = frut.proteinas
+        madureza = frut.madureza
+        carboidratos= frut.carboidratos
+        fibras = frut.fibras
+        lipideos = frut.lipideos
+#        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
+        valor = -1
+        if madureza == 1:
+            if lipideos == 1: valor = -10
+            if lipideos == 2:
+                if carboidratos == 1: valor = -10
+                if carboidratos == 2: valor = 100
+                if carboidratos == 3: valor = -1
+            if lipideos == 3: valor = 100
+        if madureza == 2:
+            if carboidratos == 1:
+                if proteinas == 1: valor = -1
+                if proteinas == 2: valor = -10
+                if proteinas == 3: valor = 100
+            if carboidratos == 2: valor = 160
+            if carboidratos == 3: valor = 160
+        if madureza == 3: valor = -10
+
+        if valor > 0:
+            return True
+        else:
+            return False
+
+
+    def id3table_2(self, frut):
+        ### madureza
+        # 1 verde
+        # 2 madura
+        # 3 podre
+        ### fibras, proteinas, lipideos
+        # 1 pouca
+        # 2 moderada
+        # 3 alta
+        proteinas = frut.proteinas
+        madureza = frut.madureza
+        carboidratos= frut.carboidratos
+        fibras = frut.fibras
+        lipideos = frut.lipideos
+        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
+        valor = -1
+        if madureza == 1:
+            if carboidratos == 1:
+                if proteinas == 1: valor = -10
+                if proteinas == 2: valor = -1
+                if proteinas == 3: valor = 100
+            if carboidratos == 2:
+                if proteinas == 1: valor = 100
+                if proteinas == 2: valor = -10
+                if proteinas == 3: valor = 100
+            if carboidratos == 3:
+                if lipideos == 1: valor = -10
+                if lipideos == 2: valor = 100
+                if lipideos == 3: valor = 100
+        if madureza == 2:
+            if carboidratos == 1:
+                if fibras == 1: valor = 100
+                if fibras == 2: valor = -10
+                if fibras == 3: valor = 100
+            if carboidratos == 2: valor = 160
+            if carboidratos == 3: valor = -1
+        if madureza == 3: valor = -10
+
+        if valor > 0:
+            return True
+        else:
+            return False
+
+
+    def id3table_1(self, frut):
+        ### madureza
+        # 1 verde
+        # 2 madura
+        # 3 podre
+        ### fibras, proteinas, lipideos
+        # 1 pouca
+        # 2 moderada
+        # 3 alta
+        proteinas = frut.proteinas
+        madureza = frut.madureza
+        carboidratos= frut.carboidratos
+        fibras = frut.fibras
+        lipideos = frut.lipideos
+        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
+        valor = -1
+        if proteinas == 1:
+            if madureza == 1:
+                if carboidratos == 1: valor = -10
+                if carboidratos == 2: valor = 100
+                if carboidratos == 3: valor = 100
+            if madureza == 2: valor = 160
+            if madureza == 3: valor = -1
+        if proteinas == 2:
+            if madureza == 1: valor = -10
+            if madureza == 2:
+                if fibras == 1: valor = -10
+                if fibras == 2: valor = -1
+                if fibras == 3: valor = 100
+            if madureza == 3: valor = -10
+        if proteinas == 3:
+            if carboidratos == 1: valor = -10
+            if carboidratos == 2: valor = -10
+            if carboidratos == 3: valor = 160
+        if valor > 0:
+            return True
+        else:
+            return False
 
     def acoes_possiveis(self):
         acoes = []

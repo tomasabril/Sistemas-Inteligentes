@@ -1,0 +1,57 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.Id3 
+Relation:     energia-da-fruta
+Instances:    32568
+Attributes:   6
+              madureza
+              carboidratos
+              fibras
+              proteinas
+              lipideos
+              delta_energia
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Id3
+
+
+madureza = verde
+|  carboidratos = pouca
+|  |  proteinas = pouca: -10
+|  |  proteinas = moderada: null
+|  |  proteinas = alta: 100
+|  carboidratos = moderada
+|  |  proteinas = pouca: 100
+|  |  proteinas = moderada: -10
+|  |  proteinas = alta: 100
+|  carboidratos = alta
+|  |  lipideos = pouca: -10
+|  |  lipideos = moderada: 100
+|  |  lipideos = alta: 100
+madureza = madura
+|  carboidratos = pouca
+|  |  fibras = pouca: 100
+|  |  fibras = moderada: -10
+|  |  fibras = alta: 100
+|  carboidratos = moderada: 160
+|  carboidratos = alta: null
+madureza = podre: -10
+
+Time taken to build model: 0.09 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       32561               99.9785 %
+Incorrectly Classified Instances         4                0.0123 %
+Kappa statistic                          0.9998
+Mean absolute error                      0     
+Root mean squared error                  0.0006
+Relative absolute error                  0.0266 %
+Root relative squared error              2.1221 %
+UnClassified Instances                   3                0.0092 %
+Total Number of Instances            32568
+
+
