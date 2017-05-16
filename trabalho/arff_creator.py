@@ -17,8 +17,9 @@ Created on May 2017
 
 
 def write_tofile(string):
-    with open('energia-da-fruta.arff', 'a') as file:
-        file.write(string)
+    if True:
+        with open('energia-da-fruta.arff', 'a') as file:
+            file.write(string)
 
 
 def write_header():

@@ -81,29 +81,30 @@ def main():
 #        fim = input("fim da execução, enter para re-executar: ")
     print('cheguei {}/{} vezes comendo todas as frutas'.format(cont, total))
 
-    vezes = 0
-    cont = 0
-    agt.id3 = True
-    while(vezes < total):
-#        print('----------------')
-        agt.atualiza_posicao(pos_inicial)
-        amb.atualiza_agente(agt.minhaPosicao)
-        amb.reseta_chao()
-#        amb.reset_frutas()
-        amb.colocar_frutas()
-        agt.reinicializar()
+    if False:
+        vezes = 0
+        cont = 0
+        agt.id3 = True
+        while(vezes < total):
+    #        print('----------------')
+            agt.atualiza_posicao(pos_inicial)
+            amb.atualiza_agente(agt.minhaPosicao)
+            amb.reseta_chao()
+    #        amb.reset_frutas()
+            amb.colocar_frutas()
+            agt.reinicializar()
 
-        agt.set_objetivo(pos_objetivo)
+            agt.set_objetivo(pos_objetivo)
 
-        if vezes == 0:
-            comandos, chegou = agt.busca_lrta(inicializar_h=True)
-        else:
-            comandos, chegou = agt.busca_lrta()
+            if vezes == 0:
+                comandos, chegou = agt.busca_lrta(inicializar_h=True)
+            else:
+                comandos, chegou = agt.busca_lrta()
 
-        vezes += 1
-        cont += chegou
+            vezes += 1
+            cont += chegou
 
-    print('cheguei {}/{} vezes com regras do ID3'.format(cont, total))
+        print('cheguei {}/{} vezes com regras do ID3'.format(cont, total))
 
 if __name__ == "__main__":
     # execute only if run from here

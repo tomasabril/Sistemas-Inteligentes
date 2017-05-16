@@ -130,15 +130,15 @@ class Agente():
         ant = self.energia
         fruta_daqui = self.frutas[tuple(self.minhaPosicao)]
         if not self.id3:
-#            if random.random() > 0.2:
-            if True:
+            if random.random() > 0.0:
+#            if True:
 #                    print('Comendo')
                 energ = fruta_daqui.comer()
                 self.energia += energ
                 self.energia -= 40
             else:
                 # se não comeu pode talvez guardar
-                if self.energia > 400:
+                if self.energia > 440:
 #                        print('Guardando')
                     self.bolso.append(fruta_daqui)
                     fruta_daqui.guardar()
@@ -183,86 +183,86 @@ class Agente():
         carboidratos= frut.carboidratos
         fibras = frut.fibras
         lipideos = frut.lipideos
-#        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
+        # print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
         verde = 1
         madura = 2
         podre = 3
-
+        
         pouca = 1
         moderada = 2
         alta = 3
-
-	    v = -1
-
-	    if madureza == verde:
-	        if carboidratos == pouca:
-                if fibras == pouca: valor = -10
-	    |  |  if fibras == moderada: v = -10
-	    |  |  if fibras == alta:
-	    |  |  |  proteinas = pouca: -10
-	    |  |  |  proteinas = moderada: -10
-	    |  |  |  proteinas = alta
-	    |  |  |  |  lipideos = pouca: 100
-	    |  |  |  |  lipideos = moderada: -10
-	    |  |  |  |  lipideos = alta: -10
-	    |  carboidratos = moderada
-	    |  |  lipideos = pouca: -10
-	    |  |  lipideos = moderada: 100
-	    |  |  lipideos = alta: 100
-	    |  carboidratos = alta
-	    |  |  lipideos = pouca: -10
-	    |  |  lipideos = moderada: 100
-	    |  |  lipideos = alta: 100
-	    madureza = madura
-	    |  carboidratos = pouca
-	    |  |  lipideos = pouca
-	    |  |  |  proteinas = pouca: -10
-	    |  |  |  proteinas = moderada: -10
-	    |  |  |  proteinas = alta
-	    |  |  |  |  fibras = pouca: -10
-	    |  |  |  |  fibras = moderada: -10
-	    |  |  |  |  fibras = alta: 100
-	    |  |  lipideos = moderada: 100
-	    |  |  lipideos = alta: 100
-	    |  carboidratos = moderada
-	    |  |  lipideos = pouca: 160
-	    |  |  lipideos = moderada
-	    |  |  |  fibras = pouca: 160
-	    |  |  |  fibras = moderada
-	    |  |  |  |  proteinas = pouca: 160
-	    |  |  |  |  proteinas = moderada: 160
-	    |  |  |  |  proteinas = alta: 160
-	    |  |  |  fibras = alta
-	    |  |  |  |  proteinas = pouca: 160
-	    |  |  |  |  proteinas = moderada: 160
-	    |  |  |  |  proteinas = alta: 160
-	    |  |  lipideos = alta
-	    |  |  |  fibras = pouca: 160
-	    |  |  |  fibras = moderada
-	    |  |  |  |  proteinas = pouca: 160
-	    |  |  |  |  proteinas = moderada: 160
-	    |  |  |  |  proteinas = alta: 160
-	    |  |  |  fibras = alta: 160
-	    |  carboidratos = alta
-	    |  |  lipideos = pouca
-	    |  |  |  fibras = pouca
-	    |  |  |  |  proteinas = pouca: 160
-	    |  |  |  |  proteinas = moderada: 160
-	    |  |  |  |  proteinas = alta: 160
-	    |  |  |  fibras = moderada: 160
-	    |  |  |  fibras = alta
-	    |  |  |  |  proteinas = pouca: 160
-	    |  |  |  |  proteinas = moderada: 160
-	    |  |  |  |  proteinas = alta: 160
-	    |  |  lipideos = moderada
-	    |  |  |  fibras = pouca: 160
-	    |  |  |  fibras = moderada
-	    |  |  |  |  proteinas = pouca: 160
-	    |  |  |  |  proteinas = moderada: 160
-	    |  |  |  |  proteinas = alta: 160
-	    |  |  |  fibras = alta: 160
-	    |  |  lipideos = alta: 160
-	    madureza = podre: -10
+        
+        v = -1
+        
+        if madureza == verde:
+            if carboidratos == pouca:
+                if fibras == pouca: v = -10
+                if fibras == moderada: v = -10
+                if fibras == alta:
+                    if proteinas == pouca: v = -10
+                    if proteinas == moderada: -10
+                    if proteinas == alta:
+                        if lipideos == pouca: v = 100
+                        if lipideos == moderada: v = -10
+                        if lipideos == alta: v = -10
+            if carboidratos == moderada:
+                if lipideos == pouca: v = -10
+                if lipideos == moderada: v = 100
+                if lipideos == alta: v = 100
+            if carboidratos == alta:
+                if lipideos == pouca: v = -10
+                if lipideos == moderada: v = 100
+                if lipideos == alta: v = 100
+        if madureza == madura:
+            if carboidratos == pouca:
+                if lipideos == pouca:
+                    if proteinas == pouca: v = -10
+                    if proteinas == moderada: v = -10
+                    if proteinas == alta:
+                        if fibras == pouca: v = -10
+                        if fibras == moderada: v = -10
+                        if fibras == alta: v = 100
+                if lipideos == moderada: v = 100
+                if lipideos == alta: v = 100
+            if carboidratos == moderada:
+                if lipideos == pouca: v = 160
+                if lipideos == moderada:
+                    if fibras == pouca: v = 160
+                    if fibras == moderada:
+                        if proteinas == pouca: v = 160
+                        if proteinas == moderada: v = 160
+                        if proteinas == alta: v = 160
+                    if fibras == alta:
+                        if proteinas == pouca: v = 160
+                        if proteinas == moderada: v = 160
+                        if proteinas == alta: v = 160
+                if lipideos == alta:
+                    if fibras == pouca: v = 160
+                    if fibras == moderada:
+                        if proteinas == pouca: v = 160
+                        if proteinas == moderada: v = 160
+                        if proteinas == alta: v = 160
+                    if fibras == alta: v = 160
+            if carboidratos == alta:
+                if lipideos == pouca:
+                    if fibras == pouca:
+                        if proteinas == pouca: v = 160
+                        if proteinas == moderada: v = 160
+                        if proteinas == alta: v = 160
+                    if fibras == moderada: v = 160
+                    if fibras == alta:
+                        if proteinas == pouca: v = 160
+                        if proteinas == moderada: v = 160
+                        if proteinas == alta: v = 160
+                if lipideos == moderada:
+                    if fibras == pouca: v = 160
+                    if fibras == moderada:
+                        if proteinas == pouca: v = 160
+                        if proteinas == moderada: v = 160
+                        if proteinas == alta: v = 160
+                    if fibras == alta: v = 160
+                if lipideos == alta: v = 160
+        if madureza == podre: v = -10
 
         if v > 0:
             return True
