@@ -130,8 +130,8 @@ class Agente():
         ant = self.energia
         fruta_daqui = self.frutas[tuple(self.minhaPosicao)]
         if not self.id3:
-            if random.random() > 0.0:
-#            if True:
+#            if random.random() > 0.0:
+            if True:
 #                    print('Comendo')
                 energ = fruta_daqui.comer()
                 self.energia += energ
