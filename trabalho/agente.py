@@ -34,7 +34,7 @@ class Agente():
         self.bolso = []
 
     def reinicializar(self):
-        self.energia = 500
+        self.energia = 300
         self.bolso.clear()
 
     def set_comandos(self, lista):

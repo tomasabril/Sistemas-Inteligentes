@@ -15,6 +15,7 @@ class Ambiente():
     colunaTamanho = 0
 
     def __init__(self, linhas, colunas):
+        self.frutas = {}
         self.linhaTamanho = linhas
         self.colunaTamanho = colunas
         self.grid = [['_' for i in range(colunas)] for j in range(linhas)]
@@ -23,7 +24,7 @@ class Ambiente():
     def colocar_frutas(self):
         ''' (linha, coluna): fruta
         '''
-        self.frutas = {}
+        self.frutas.clear()
         for lin in range(self.linhaTamanho):
             for col in range(self.colunaTamanho):
                 if self.grid[lin][col] in self.andavel:
