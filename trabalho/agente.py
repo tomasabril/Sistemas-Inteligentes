@@ -130,8 +130,8 @@ class Agente():
         ant = self.energia
         fruta_daqui = self.frutas[tuple(self.minhaPosicao)]
         if not self.id3:
-            if random.random() > 0.2:
-#            if True:
+#            if random.random() > 0.2:
+            if True:
 #                    print('Comendo')
                 energ = fruta_daqui.comer()
                 self.energia += energ
@@ -143,7 +143,7 @@ class Agente():
                     self.bolso.append(fruta_daqui)
                     fruta_daqui.guardar()
         if self.id3:
-            if self.id3table_3(fruta_daqui):
+            if self.id3table_final(fruta_daqui):
                 if self.energia > 440:
 #                        print('Guardando')
                     self.bolso.append(fruta_daqui)
@@ -168,6 +168,106 @@ class Agente():
         f = fruta_daqui
         arff_creator.write_data(f.madureza, f.carboidratos, f.fibras, f.proteinas, f.lipideos, delta)
 #        print('mudança de energia: {}'.format(delta))
+
+    def id3table_final(self, frut):
+        ### madureza
+        # 1 verde
+        # 2 madura
+        # 3 podre
+        ### fibras, proteinas, lipideos
+        # 1 pouca
+        # 2 moderada
+        # 3 alta
+        proteinas = frut.proteinas
+        madureza = frut.madureza
+        carboidratos= frut.carboidratos
+        fibras = frut.fibras
+        lipideos = frut.lipideos
+#        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
+        verde = 1
+        madura = 2
+        podre = 3
+
+        pouca = 1
+        moderada = 2
+        alta = 3
+
+	    v = -1
+
+	    if madureza == verde:
+	        if carboidratos == pouca:
+                if fibras == pouca: valor = -10
+	    |  |  if fibras == moderada: v = -10
+	    |  |  if fibras == alta:
+	    |  |  |  proteinas = pouca: -10
+	    |  |  |  proteinas = moderada: -10
+	    |  |  |  proteinas = alta
+	    |  |  |  |  lipideos = pouca: 100
+	    |  |  |  |  lipideos = moderada: -10
+	    |  |  |  |  lipideos = alta: -10
+	    |  carboidratos = moderada
+	    |  |  lipideos = pouca: -10
+	    |  |  lipideos = moderada: 100
+	    |  |  lipideos = alta: 100
+	    |  carboidratos = alta
+	    |  |  lipideos = pouca: -10
+	    |  |  lipideos = moderada: 100
+	    |  |  lipideos = alta: 100
+	    madureza = madura
+	    |  carboidratos = pouca
+	    |  |  lipideos = pouca
+	    |  |  |  proteinas = pouca: -10
+	    |  |  |  proteinas = moderada: -10
+	    |  |  |  proteinas = alta
+	    |  |  |  |  fibras = pouca: -10
+	    |  |  |  |  fibras = moderada: -10
+	    |  |  |  |  fibras = alta: 100
+	    |  |  lipideos = moderada: 100
+	    |  |  lipideos = alta: 100
+	    |  carboidratos = moderada
+	    |  |  lipideos = pouca: 160
+	    |  |  lipideos = moderada
+	    |  |  |  fibras = pouca: 160
+	    |  |  |  fibras = moderada
+	    |  |  |  |  proteinas = pouca: 160
+	    |  |  |  |  proteinas = moderada: 160
+	    |  |  |  |  proteinas = alta: 160
+	    |  |  |  fibras = alta
+	    |  |  |  |  proteinas = pouca: 160
+	    |  |  |  |  proteinas = moderada: 160
+	    |  |  |  |  proteinas = alta: 160
+	    |  |  lipideos = alta
+	    |  |  |  fibras = pouca: 160
+	    |  |  |  fibras = moderada
+	    |  |  |  |  proteinas = pouca: 160
+	    |  |  |  |  proteinas = moderada: 160
+	    |  |  |  |  proteinas = alta: 160
+	    |  |  |  fibras = alta: 160
+	    |  carboidratos = alta
+	    |  |  lipideos = pouca
+	    |  |  |  fibras = pouca
+	    |  |  |  |  proteinas = pouca: 160
+	    |  |  |  |  proteinas = moderada: 160
+	    |  |  |  |  proteinas = alta: 160
+	    |  |  |  fibras = moderada: 160
+	    |  |  |  fibras = alta
+	    |  |  |  |  proteinas = pouca: 160
+	    |  |  |  |  proteinas = moderada: 160
+	    |  |  |  |  proteinas = alta: 160
+	    |  |  lipideos = moderada
+	    |  |  |  fibras = pouca: 160
+	    |  |  |  fibras = moderada
+	    |  |  |  |  proteinas = pouca: 160
+	    |  |  |  |  proteinas = moderada: 160
+	    |  |  |  |  proteinas = alta: 160
+	    |  |  |  fibras = alta: 160
+	    |  |  lipideos = alta: 160
+	    madureza = podre: -10
+
+        if v > 0:
+            return True
+        else:
+            return False
 
     def id3table_3(self, frut):
         ### madureza

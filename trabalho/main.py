@@ -40,7 +40,7 @@ def main():
     amb.set_agente(agt.minhaPosicao)
 
 #    print("Executando LRTA*")
-    total = 5000
+    total = 10000
 
     vezes = 0
     cont = 0
@@ -79,7 +79,7 @@ def main():
         cont += chegou
 
 #        fim = input("fim da execução, enter para re-executar: ")
-    print('cheguei {}/{} vezes comendo 80% das frutas'.format(cont, total))
+    print('cheguei {}/{} vezes comendo todas as frutas'.format(cont, total))
 
     vezes = 0
     cont = 0

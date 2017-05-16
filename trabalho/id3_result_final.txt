@@ -1,0 +1,102 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.Id3 
+Relation:     energia-da-fruta
+Instances:    65363
+Attributes:   6
+              madureza
+              carboidratos
+              fibras
+              proteinas
+              lipideos
+              delta_energia
+Test mode:evaluate on training data
+
+=== Classifier model (full training set) ===
+
+Id3
+
+
+madureza = verde
+|  carboidratos = pouca
+|  |  fibras = pouca: -10
+|  |  fibras = moderada: -10
+|  |  fibras = alta
+|  |  |  proteinas = pouca: -10
+|  |  |  proteinas = moderada: -10
+|  |  |  proteinas = alta
+|  |  |  |  lipideos = pouca: 100
+|  |  |  |  lipideos = moderada: -10
+|  |  |  |  lipideos = alta: -10
+|  carboidratos = moderada
+|  |  lipideos = pouca: -10
+|  |  lipideos = moderada: 100
+|  |  lipideos = alta: 100
+|  carboidratos = alta
+|  |  lipideos = pouca: -10
+|  |  lipideos = moderada: 100
+|  |  lipideos = alta: 100
+madureza = madura
+|  carboidratos = pouca
+|  |  lipideos = pouca
+|  |  |  proteinas = pouca: -10
+|  |  |  proteinas = moderada: -10
+|  |  |  proteinas = alta
+|  |  |  |  fibras = pouca: -10
+|  |  |  |  fibras = moderada: -10
+|  |  |  |  fibras = alta: 100
+|  |  lipideos = moderada: 100
+|  |  lipideos = alta: 100
+|  carboidratos = moderada
+|  |  lipideos = pouca: 160
+|  |  lipideos = moderada
+|  |  |  fibras = pouca: 160
+|  |  |  fibras = moderada
+|  |  |  |  proteinas = pouca: 160
+|  |  |  |  proteinas = moderada: 160
+|  |  |  |  proteinas = alta: 160
+|  |  |  fibras = alta
+|  |  |  |  proteinas = pouca: 160
+|  |  |  |  proteinas = moderada: 160
+|  |  |  |  proteinas = alta: 160
+|  |  lipideos = alta
+|  |  |  fibras = pouca: 160
+|  |  |  fibras = moderada
+|  |  |  |  proteinas = pouca: 160
+|  |  |  |  proteinas = moderada: 160
+|  |  |  |  proteinas = alta: 160
+|  |  |  fibras = alta: 160
+|  carboidratos = alta
+|  |  lipideos = pouca
+|  |  |  fibras = pouca
+|  |  |  |  proteinas = pouca: 160
+|  |  |  |  proteinas = moderada: 160
+|  |  |  |  proteinas = alta: 160
+|  |  |  fibras = moderada: 160
+|  |  |  fibras = alta
+|  |  |  |  proteinas = pouca: 160
+|  |  |  |  proteinas = moderada: 160
+|  |  |  |  proteinas = alta: 160
+|  |  lipideos = moderada
+|  |  |  fibras = pouca: 160
+|  |  |  fibras = moderada
+|  |  |  |  proteinas = pouca: 160
+|  |  |  |  proteinas = moderada: 160
+|  |  |  |  proteinas = alta: 160
+|  |  |  fibras = alta: 160
+|  |  lipideos = alta: 160
+madureza = podre: -10
+
+Time taken to build model: 0.2 seconds
+
+=== Evaluation on training set ===
+=== Summary ===
+
+Correctly Classified Instances       65351               99.9816 %
+Incorrectly Classified Instances        12                0.0184 %
+Kappa statistic                          0.9997
+Mean absolute error                      0     
+Root mean squared error                  0.0008
+Relative absolute error                  0.0607 %
+Root relative squared error              2.4704 %
+Total Number of Instances            65363     
