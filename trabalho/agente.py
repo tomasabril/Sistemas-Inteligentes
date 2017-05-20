@@ -88,6 +88,7 @@ class Agente():
                 for col in range(self.colunaTamanho):
                     # euristica euclidiana
                     self.est_h[tuple([lin, col])] = math.sqrt(abs(lin - self.objetivo[0])**2 + abs(col- self.objetivo[1])**2)
+#                    self.est_h[tuple([lin, col])] = 0
         while self.minhaPosicao != self.objetivo:
             proximo.clear()
             for acao in self.acoes_com_result(self.minhaPosicao):
@@ -119,7 +120,7 @@ class Agente():
         else:
             cheguei = 1
 #            print('.', end='')
-        return solucao, cheguei
+        return solucao, custo, cheguei, self.energia
 
     def ver_fruta(self):
         ''' O que fazer quando ver uma fruta.
@@ -130,8 +131,8 @@ class Agente():
         ant = self.energia
         fruta_daqui = self.frutas[tuple(self.minhaPosicao)]
         if not self.id3:
-#            if random.random() > 0.0:
-            if True:
+            if random.random() > 0.5:
+#            if True:
 #                    print('Comendo')
                 energ = fruta_daqui.comer()
                 self.energia += energ
@@ -166,7 +167,7 @@ class Agente():
             self.energia -= 40
 
         f = fruta_daqui
-        arff_creator.write_data(f.madureza, f.carboidratos, f.fibras, f.proteinas, f.lipideos, delta)
+        arff_creator.write_data(f.madureza, f.carboidratos, f.fibras, f.proteinas, f.lipideos, energ-40)
 #        print('mudança de energia: {}'.format(delta))
 
     def id3table_final(self, frut):
@@ -187,81 +188,45 @@ class Agente():
         verde = 1
         madura = 2
         podre = 3
-        
+
         pouca = 1
         moderada = 2
         alta = 3
-        
+
         v = -1
-        
+
         if madureza == verde:
-            if carboidratos == pouca:
-                if fibras == pouca: v = -10
-                if fibras == moderada: v = -10
-                if fibras == alta:
-                    if proteinas == pouca: v = -10
-                    if proteinas == moderada: -10
-                    if proteinas == alta:
-                        if lipideos == pouca: v = 100
-                        if lipideos == moderada: v = -10
-                        if lipideos == alta: v = -10
-            if carboidratos == moderada:
-                if lipideos == pouca: v = -10
-                if lipideos == moderada: v = 100
-                if lipideos == alta: v = 100
-            if carboidratos == alta:
-                if lipideos == pouca: v = -10
-                if lipideos == moderada: v = 100
-                if lipideos == alta: v = 100
-        if madureza == madura:
-            if carboidratos == pouca:
-                if lipideos == pouca:
+            if lipideos == pouca:
+                if carboidratos == pouca:
                     if proteinas == pouca: v = -10
                     if proteinas == moderada: v = -10
                     if proteinas == alta:
                         if fibras == pouca: v = -10
                         if fibras == moderada: v = -10
                         if fibras == alta: v = 100
+                if carboidratos == moderada: v = -10
+                if carboidratos == alta: v = -10
+            if lipideos == moderada:
+                if carboidratos == pouca: v = -10
+                if carboidratos == moderada: v = 100
+                if carboidratos == alta: v = 100
+            if lipideos == alta:
+                if carboidratos == pouca: v = -10
+                if carboidratos == moderada: v = 100
+                if carboidratos == alta: v = 100
+        if madureza == madura:
+            if carboidratos == pouca:
+                if lipideos == pouca:
+                    if fibras == pouca: v = -10
+                    if fibras == moderada: v = -10
+                    if fibras == alta:
+                        if proteinas == pouca: v = -10
+                        if proteinas == moderada: v = -10
+                        if proteinas == alta: v = 100
                 if lipideos == moderada: v = 100
                 if lipideos == alta: v = 100
-            if carboidratos == moderada:
-                if lipideos == pouca: v = 160
-                if lipideos == moderada:
-                    if fibras == pouca: v = 160
-                    if fibras == moderada:
-                        if proteinas == pouca: v = 160
-                        if proteinas == moderada: v = 160
-                        if proteinas == alta: v = 160
-                    if fibras == alta:
-                        if proteinas == pouca: v = 160
-                        if proteinas == moderada: v = 160
-                        if proteinas == alta: v = 160
-                if lipideos == alta:
-                    if fibras == pouca: v = 160
-                    if fibras == moderada:
-                        if proteinas == pouca: v = 160
-                        if proteinas == moderada: v = 160
-                        if proteinas == alta: v = 160
-                    if fibras == alta: v = 160
-            if carboidratos == alta:
-                if lipideos == pouca:
-                    if fibras == pouca:
-                        if proteinas == pouca: v = 160
-                        if proteinas == moderada: v = 160
-                        if proteinas == alta: v = 160
-                    if fibras == moderada: v = 160
-                    if fibras == alta:
-                        if proteinas == pouca: v = 160
-                        if proteinas == moderada: v = 160
-                        if proteinas == alta: v = 160
-                if lipideos == moderada:
-                    if fibras == pouca: v = 160
-                    if fibras == moderada:
-                        if proteinas == pouca: v = 160
-                        if proteinas == moderada: v = 160
-                        if proteinas == alta: v = 160
-                    if fibras == alta: v = 160
-                if lipideos == alta: v = 160
+            if carboidratos == moderada: v = 160
+            if carboidratos == alta: v = 160
         if madureza == podre: v = -10
 
         if v > 0:
@@ -269,126 +234,6 @@ class Agente():
         else:
             return False
 
-    def id3table_3(self, frut):
-        ### madureza
-        # 1 verde
-        # 2 madura
-        # 3 podre
-        ### fibras, proteinas, lipideos
-        # 1 pouca
-        # 2 moderada
-        # 3 alta
-        proteinas = frut.proteinas
-        madureza = frut.madureza
-        carboidratos= frut.carboidratos
-        fibras = frut.fibras
-        lipideos = frut.lipideos
-#        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
-        valor = -1
-        if madureza == 1:
-            if lipideos == 1: valor = -10
-            if lipideos == 2:
-                if carboidratos == 1: valor = -10
-                if carboidratos == 2: valor = 100
-                if carboidratos == 3: valor = -1
-            if lipideos == 3: valor = 100
-        if madureza == 2:
-            if carboidratos == 1:
-                if proteinas == 1: valor = -1
-                if proteinas == 2: valor = -10
-                if proteinas == 3: valor = 100
-            if carboidratos == 2: valor = 160
-            if carboidratos == 3: valor = 160
-        if madureza == 3: valor = -10
-
-        if valor > 0:
-            return True
-        else:
-            return False
-
-
-    def id3table_2(self, frut):
-        ### madureza
-        # 1 verde
-        # 2 madura
-        # 3 podre
-        ### fibras, proteinas, lipideos
-        # 1 pouca
-        # 2 moderada
-        # 3 alta
-        proteinas = frut.proteinas
-        madureza = frut.madureza
-        carboidratos= frut.carboidratos
-        fibras = frut.fibras
-        lipideos = frut.lipideos
-        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
-        valor = -1
-        if madureza == 1:
-            if carboidratos == 1:
-                if proteinas == 1: valor = -10
-                if proteinas == 2: valor = -1
-                if proteinas == 3: valor = 100
-            if carboidratos == 2:
-                if proteinas == 1: valor = 100
-                if proteinas == 2: valor = -10
-                if proteinas == 3: valor = 100
-            if carboidratos == 3:
-                if lipideos == 1: valor = -10
-                if lipideos == 2: valor = 100
-                if lipideos == 3: valor = 100
-        if madureza == 2:
-            if carboidratos == 1:
-                if fibras == 1: valor = 100
-                if fibras == 2: valor = -10
-                if fibras == 3: valor = 100
-            if carboidratos == 2: valor = 160
-            if carboidratos == 3: valor = -1
-        if madureza == 3: valor = -10
-
-        if valor > 0:
-            return True
-        else:
-            return False
-
-
-    def id3table_1(self, frut):
-        ### madureza
-        # 1 verde
-        # 2 madura
-        # 3 podre
-        ### fibras, proteinas, lipideos
-        # 1 pouca
-        # 2 moderada
-        # 3 alta
-        proteinas = frut.proteinas
-        madureza = frut.madureza
-        carboidratos= frut.carboidratos
-        fibras = frut.fibras
-        lipideos = frut.lipideos
-        print('caracts dessa fruta: prot:{} mad:{} carb:{} fibr:{} lip:{}'.format(proteinas, madureza, carboidratos, fibras, lipideos))
-        valor = -1
-        if proteinas == 1:
-            if madureza == 1:
-                if carboidratos == 1: valor = -10
-                if carboidratos == 2: valor = 100
-                if carboidratos == 3: valor = 100
-            if madureza == 2: valor = 160
-            if madureza == 3: valor = -1
-        if proteinas == 2:
-            if madureza == 1: valor = -10
-            if madureza == 2:
-                if fibras == 1: valor = -10
-                if fibras == 2: valor = -1
-                if fibras == 3: valor = 100
-            if madureza == 3: valor = -10
-        if proteinas == 3:
-            if carboidratos == 1: valor = -10
-            if carboidratos == 2: valor = -10
-            if carboidratos == 3: valor = 160
-        if valor > 0:
-            return True
-        else:
-            return False
 
     def acoes_possiveis(self):
         acoes = []
