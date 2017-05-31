@@ -9,7 +9,6 @@ Created on Sat Apr 29 19:05:52 2017
 # ---
 
 import random
-import time
 import itertools
 
 
@@ -18,9 +17,9 @@ class Main():
     def __init__(self):
         #
         # se True, faz grafico dos conflitos por loop com matplotlib
-        graficos = False
+        graficos = True
         # se True, imprime no terminal o progresso
-        self.terminal = False
+        self.terminal = True
         # ------------------------
         # linhas e colunas do campo
         grid = [x for x in range(9*9)]
@@ -68,42 +67,42 @@ class Main():
 
         print("estado inicial - randomico ----------------")
         self.print_grid(grid)
-        print(" -> aleatorio: ----------------------------")
-        conf_r, v = self.aleatorio(grid, campolc)
-        print(" -> all_permutations 81! possibilidades ---")
+        # print(" -> aleatorio: ----------------------------")
+        # conf_r, v = self.aleatorio(grid, campolc)
+        # print(" -> all_permutations 81! possibilidades ---")
         #\n = 5797126020747367985879734231578109105412357244731625958745865049716390179693892056256184534249745940480000000000000000000")
-        conf_ap, v = self.all_permut(grid[:], campolc)
-        print(" -> hill_climb: ---------------------------")
-        conf_hc, v = self.hill_climb(grid, campolc, dicgrupo)
+        # conf_ap, v = self.all_permut(grid[:], campolc)
+        # print(" -> hill_climb: ---------------------------")
+        # conf_hc, v = self.hill_climb(grid, campolc, dicgrupo)
         print(" -> local_beam_search: ", end='')
         conf_f, v = self.local_beam_search(grid[:], campolc, dicgrupo)
-        print(" -> genético: -----------------------------")
-        conf_g, v = self.genetic(grid[:], campolc, dicgrupo)
+        # print(" -> genético: -----------------------------")
+        # conf_g, v = self.genetic(grid[:], campolc, dicgrupo)
         if(graficos):
             import matplotlib.pyplot as plt
             fig = plt.figure()
-            ax1 = fig.add_subplot(511)
-            ax2 = fig.add_subplot(512)
-            ax3 = fig.add_subplot(513)
+            # ax1 = fig.add_subplot(511)
+            # ax2 = fig.add_subplot(512)
+            # ax3 = fig.add_subplot(513)
             ax4 = fig.add_subplot(514)
-            ax5 = fig.add_subplot(515)
-            ax1.set_ylabel("conflitos")
-            ax2.set_ylabel("conflitos")
-            ax3.set_ylabel("conflitos")
+            # ax5 = fig.add_subplot(515)
+            # ax1.set_ylabel("conflitos")
+            # ax2.set_ylabel("conflitos")
+            # ax3.set_ylabel("conflitos")
             ax4.set_ylabel("conflitos")
-            ax5.set_ylabel("conflitos")
-            
-            ax1.plot(conf_r)
-            ax1.set_title("random")
-            ax2.plot(conf_ap)
-            ax2.set_title("all permutations")
-            ax3.plot(conf_hc)
-            ax3.set_title("hill climb")
+            # ax5.set_ylabel("conflitos")
+
+            # ax1.plot(conf_r)
+            # ax1.set_title("random")
+            # ax2.plot(conf_ap)
+            # ax2.set_title("all permutations")
+            # ax3.plot(conf_hc)
+            # ax3.set_title("hill climb")
             ax4.plot(conf_f)
             ax4.set_title("feixe")
-            ax5.plot(conf_g)
-            ax5.set_title("genetico")
-            fig.tight_layout()
+            # ax5.plot(conf_g)
+            # ax5.set_title("genetico")
+            # fig.tight_layout()
             plt.show()
 
     def sucessores(self, campo, campolc, dicgrupo):
@@ -122,8 +121,8 @@ class Main():
         return vizinhos
 
     def local_beam_search(self, campo, campolc, dicgrupo):
-        k = 10
-        max_plateau = 15
+        k = 13
+        max_plateau = 7
         print("k={} ----------------".format(k))
         flag = False
         vezes = 0
@@ -157,16 +156,17 @@ class Main():
                         flag = True
                         break
                     # retirando lugares ja andados
-#                    if (el not in andados):
-#                        viz2.append(el)
-#                    else:
-#                        print("ja estive aqui")
+                    ## subtração de sets parece ser mais rapido
+                    # if (el not in andados):
+                    #    viz2.append(el)
+                    # else:
+                    #    print("ja estive aqui")
                 if flag: break
                 tup_viz = map(tuple, viz)
                 tup_andados = map(tuple, andados)
                 viz2 = list(set(tup_viz) - set(tup_andados))
 
-#                viz2 = viz
+                # viz2 = viz
 #                print("len vizinhos: {}".format(len(viz)))
                 if not viz2:
                     print("\nBeam_search ficou preso depois de {} vezes".format(vezes))
