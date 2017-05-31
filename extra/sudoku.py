@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr 29 19:05:52 2017
+Created on Sat Apr 29 2017
 
 @author: Tomás Abril
 """
